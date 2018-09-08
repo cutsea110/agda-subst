@@ -28,15 +28,27 @@ data P {A : Set} : List A → List A → Set where
 ⟨⟩≢xs^⟨z⟩^ys ⟨⟩ z ys ()
 ⟨⟩≢xs^⟨z⟩^ys (x ∷ xs) z ys ()
 
+xs^⟨⟩≡xs : {A : Set} → (xs : List A) → xs ^ ⟨⟩ ≡ xs
+xs^⟨⟩≡xs ⟨⟩ = refl
+xs^⟨⟩≡xs (x ∷ xs) = cong (x ∷_) (xs^⟨⟩≡xs xs)
+xs≡xs^⟨⟩ : {A : Set} → (xs : List A) → xs ≡ xs ^ ⟨⟩
+xs≡xs^⟨⟩ ⟨⟩ = refl
+xs≡xs^⟨⟩ (x ∷ xs) = cong (x ∷_) (xs≡xs^⟨⟩ xs)
+
 refl-law : {A : Set} {xs : List A} → P xs xs
 refl-law {xs = ⟨⟩} = nil ⟨⟩ refl
 refl-law {xs = x ∷ xs} = sbt x xs (x ∷ xs) (⟨⟩ , xs , refl-law , refl)
+
+cong-P : {A : Set}{x y : A}{xs ys : List A} → x ≡ y → P xs ys → P (x ∷ xs) (y ∷ ys)
+cong-P {x = x} refl (nil .⟨⟩ refl) = sbt x ⟨⟩ (x ∷ ⟨⟩) (⟨⟩ , ⟨⟩ , nil ⟨⟩ refl , refl)
+cong-P {x = x} refl (sbt x₁ s t x₂) = sbt x (x₁ ∷ s) (x ∷ t) (⟨⟩ , t , sbt x₁ s t x₂ , refl)
 
 sym-law : {A : Set} {xs ys : List A} → P xs ys → P ys xs
 sym-law {xs = ⟨⟩} {.⟨⟩} (nil .⟨⟩ refl) = nil ⟨⟩ refl
 sym-law {xs = x ∷ xs} {⟨⟩} (nil .(x ∷ xs) ())
 sym-law {xs = x ∷ xs} {⟨⟩} (sbt .x .xs .⟨⟩ (proj₁ , proj₂ , proj₃ , proj₄)) = ⊥-elim (⟨⟩≢xs^⟨z⟩^ys proj₁ x proj₂ proj₄)
-sym-law {xs = x ∷ xs} {y ∷ ys} prf = {!!}
+sym-law {xs = x ∷ xs} {y ∷ ys} (sbt .x .xs .(y ∷ ys) (proj₁ , ⟨⟩ , proj₃ , proj₄)) = {!!}
+sym-law {xs = x ∷ xs} {y ∷ ys} (sbt .x .xs .(y ∷ ys) (proj₁ , (x₁ ∷ proj₂) , proj₃ , proj₄)) = {!!}
 
 trans-law : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
 trans-law p q = {!!}
