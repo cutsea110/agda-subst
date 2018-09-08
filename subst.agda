@@ -43,10 +43,15 @@ cong-P : {A : Set}{x y : A}{xs ys : List A} → x ≡ y → P xs ys → P (x ∷
 cong-P {x = x} refl (nil .⟨⟩ refl) = sbt x ⟨⟩ (x ∷ ⟨⟩) (⟨⟩ , ⟨⟩ , nil ⟨⟩ refl , refl)
 cong-P {x = x} refl (sbt x₁ s t x₂) = sbt x (x₁ ∷ s) (x ∷ t) (⟨⟩ , t , sbt x₁ s t x₂ , refl)
 
+lemma₂ : {A : Set}(w : A)(xs ys us vs : List A) → P (xs ^ ys) (us ^ vs) → P (xs ^ ⟨ w ⟩ ^ ys) (us ^ ⟨ w ⟩ ^ vs)
+lemma₂ = {!!}
+
 lemma₁ : {A : Set}(w : A)(xs ys zs : List A) → P (w ∷ (xs ^ ys)) zs → P (xs ^ ⟨ w ⟩ ^ ys) zs
 lemma₁ w ⟨⟩ ys zs prf = prf
 lemma₁ w (x ∷ xs) ys .⟨⟩ (nil .(w ∷ (x ∷ (xs ^ ys))) ())
-lemma₁ w (x ∷ xs) ys zs (sbt .w .(x ∷ (xs ^ ys)) .zs (proj₁ , proj₂ , proj₃ , proj₄)) = {!!}
+lemma₁ w (x ∷ xs) ys zs (sbt .w .(x ∷ (xs ^ ys)) .zs (proj₁ , proj₂ , proj₃ , proj₄))
+  rewrite proj₄ with cong-P {x = w} {y = w} refl proj₃
+... | prf = lemma₂ w (x ∷ xs) ys proj₁ proj₂ proj₃
 
 lemma₀ : {A : Set}(v w : A)(xs ys zs : List A) → P (v ∷ (xs ^ ⟨ w ⟩ ^ ys)) zs → P (w ∷ (xs ^ ⟨ v ⟩ ^ ys)) zs
 lemma₀ v w xs ys .⟨⟩ (nil .(v ∷ (xs ^ (w ∷ ⟨⟩) ^ ys)) ())
