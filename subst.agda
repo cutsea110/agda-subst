@@ -12,7 +12,8 @@ _^_ : {A : Set} → List A → List A → List A
 infixl 6 _^_
 
 open import Relation.Binary.PropositionalEquality as PropEq
-open import Data.Product using (∃) renaming (_×_ to _∧_)
+open import Data.Product using (∃; _,_) renaming (_×_ to _∧_)
+open import Data.Empty
 
 data P {A : Set} : List A → List A → Set where
   nil : (s : List A) → (prf : s ≡ ⟨⟩) → P s ⟨⟩
@@ -20,11 +21,22 @@ data P {A : Set} : List A → List A → Set where
         → (∃ λ u → ∃ λ v → P s (u ^ v) ∧ t ≡ u ^ ⟨ x ⟩ ^ v)
         → P (⟨ x ⟩ ^ s) t  
 
-refl-law : {A : Set} {x : List A} → P x x
-refl-law = {!!}
+⟨⟩≢xs≡⟨x⟩ : {A : Set} → (x : A) (xs : List A) → ⟨⟩ ≢ xs ^ ⟨ x ⟩
+⟨⟩≢xs≡⟨x⟩ x ⟨⟩ ()
+⟨⟩≢xs≡⟨x⟩ x (x₁ ∷ xs) ()
+⟨⟩≢xs^⟨z⟩^ys : {A : Set} → (xs : List A) (z : A) (ys : List A) → ⟨⟩ ≢ xs ^ ⟨ z ⟩ ^ ys
+⟨⟩≢xs^⟨z⟩^ys ⟨⟩ z ys ()
+⟨⟩≢xs^⟨z⟩^ys (x ∷ xs) z ys ()
 
-sym-law : {A : Set} {x y : List A} → P x y → P y x
-sym-law = {!!}
+refl-law : {A : Set} {xs : List A} → P xs xs
+refl-law {xs = ⟨⟩} = nil ⟨⟩ refl
+refl-law {xs = x ∷ xs} = sbt x xs (x ∷ xs) (⟨⟩ , xs , refl-law , refl)
 
-trans-law : {A : Set} {x y z : List A} → P x y → P y z → P x z
-trans-law = {!!}
+sym-law : {A : Set} {xs ys : List A} → P xs ys → P ys xs
+sym-law {xs = ⟨⟩} {.⟨⟩} (nil .⟨⟩ refl) = nil ⟨⟩ refl
+sym-law {xs = x ∷ xs} {⟨⟩} (nil .(x ∷ xs) ())
+sym-law {xs = x ∷ xs} {⟨⟩} (sbt .x .xs .⟨⟩ (proj₁ , proj₂ , proj₃ , proj₄)) = ⊥-elim (⟨⟩≢xs^⟨z⟩^ys proj₁ x proj₂ proj₄)
+sym-law {xs = x ∷ xs} {y ∷ ys} prf = {!!}
+
+trans-law : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
+trans-law p q = {!!}
