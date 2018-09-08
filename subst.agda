@@ -36,6 +36,9 @@ xs≡xs^⟨⟩ ⟨⟩ = refl
 xs≡xs^⟨⟩ (x ∷ xs) = cong (x ∷_) (xs≡xs^⟨⟩ xs)
 
 refl-law : {A : Set} {xs : List A} → P xs xs
+sym-law : {A : Set} {xs ys : List A} → P xs ys → P ys xs
+trans-law : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
+
 refl-law {xs = ⟨⟩} = nil ⟨⟩ refl
 refl-law {xs = x ∷ xs} = sbt x xs (x ∷ xs) (⟨⟩ , xs , refl-law , refl)
 
@@ -43,8 +46,12 @@ cong-P : {A : Set}{x y : A}{xs ys : List A} → x ≡ y → P xs ys → P (x ∷
 cong-P {x = x} refl (nil .⟨⟩ refl) = sbt x ⟨⟩ (x ∷ ⟨⟩) (⟨⟩ , ⟨⟩ , nil ⟨⟩ refl , refl)
 cong-P {x = x} refl (sbt x₁ s t x₂) = sbt x (x₁ ∷ s) (x ∷ t) (⟨⟩ , t , sbt x₁ s t x₂ , refl)
 
+lemma₃ : {A : Set}(w : A)(xs ys zs : List A) → P (w ∷ (xs ^ ys)) zs → P (xs ^ ⟨ w ⟩ ^ ys) zs
+lemma₃ = {!!}
+
 lemma₂ : {A : Set}(w : A)(xs ys us vs : List A) → P (xs ^ ys) (us ^ vs) → P (xs ^ ⟨ w ⟩ ^ ys) (us ^ ⟨ w ⟩ ^ vs)
-lemma₂ = {!!}
+lemma₂ w xs ys us vs prf with cong-P {x = w} {y = w} refl prf
+... | p = lemma₃ w xs ys (us ^ (w ∷ ⟨⟩) ^ vs) (sbt w (xs ^ ys) (us ^ (w ∷ ⟨⟩) ^ vs) (us , vs , prf , refl))
 
 lemma₁ : {A : Set}(w : A)(xs ys zs : List A) → P (w ∷ (xs ^ ys)) zs → P (xs ^ ⟨ w ⟩ ^ ys) zs
 lemma₁ w ⟨⟩ ys zs prf = prf
@@ -59,7 +66,6 @@ lemma₀ v w xs ys zs (sbt .v .(xs ^ (w ∷ ⟨⟩) ^ ys) .zs (proj₁ , proj₂
 ... | p = {!!}
 
 
-sym-law : {A : Set} {xs ys : List A} → P xs ys → P ys xs
 
 lemma : {A : Set}(w : A)(xs ys zs : List A) → P xs (ys ^ zs) → P (ys ^ ⟨ w ⟩ ^ zs) (w ∷ xs)
 lemma w ⟨⟩ ⟨⟩ .⟨⟩ (nil .⟨⟩ refl) = sbt w ⟨⟩ (w ∷ ⟨⟩) (⟨⟩ , ⟨⟩ , nil ⟨⟩ refl , refl)
@@ -74,5 +80,4 @@ sym-law {xs = x ∷ xs} {.⟨⟩} (nil .(x ∷ xs) ())
 sym-law {xs = x ∷ xs} {.(proj₁ ^ (x ∷ ⟨⟩) ^ proj₂)} (sbt .x .xs .(proj₁ ^ (x ∷ ⟨⟩) ^ proj₂) (proj₁ , proj₂ , proj₃ , refl))
   = lemma x xs proj₁ proj₂ proj₃
 
-trans-law : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
 trans-law p q = {!!}
