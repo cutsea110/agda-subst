@@ -35,6 +35,15 @@ ins : {A : Set}{xs ys : List A}(x : A) → P xs ys → P (⟨ x ⟩ ^ xs) (⟨ x
 ins x (nil .⟨⟩ refl) = sbt x ⟨⟩ (x ∷ ⟨⟩) (⟨⟩ , ⟨⟩ , nil ⟨⟩ refl , refl)
 ins x (sbt x₁ s t x₂) = sbt x (x₁ ∷ s) (x ∷ t) (⟨⟩ , t , sbt x₁ s t x₂ , refl)
 
+assoc-list : {A : Set}(x y z : List A) → (x ^ y) ^ z ≡ x ^ (y ^ z)
+assoc-list ⟨⟩ ys zs = refl
+assoc-list (x ∷ xs) ys zs = cong (x ∷_) (assoc-list xs ys zs)
+
+add : {A : Set}{xs ys : List A}(x : A) → P xs ys → P (xs ^ ⟨ x ⟩) (ys ^ ⟨ x ⟩)
+add x (nil .⟨⟩ refl) = sbt x ⟨⟩ (x ∷ ⟨⟩) (⟨⟩ , ⟨⟩ , nil ⟨⟩ refl , refl)
+add x (sbt x₁ s .(p₁ ^ x₁ ∷ p₂) (p₁ , p₂ , p₃ , refl)) = ?
+
+
 del : {A : Set}(x : A)(xs ys : List A) → P (x ∷ xs) (x ∷ ys) → P xs ys
 del x xs ys (sbt .x .xs .(x ∷ ys) (⟨⟩ , .ys , p₃ , refl)) = p₃
 del x xs .(p₁ ^ x ∷ p₂) (sbt .x .xs .(x ∷ p₁ ^ x ∷ p₂) (.x ∷ p₁ , p₂ , p₃ , refl)) = trans-law p₃ (push-in x p₁ p₂)
