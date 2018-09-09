@@ -17,11 +17,11 @@ sym-law : {A : Set} {xs ys : List A} → P xs ys → P ys xs
 trans-law : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
 
 -- | depends on just only refl-law
-push-in : {A : Set}(x : A)(xs ys : List A) → P (x ∷ xs ^ ys) (xs ^ ⟨ x ⟩ ^ ys)
+push-in : {A : Set}(x : A)(xs ys : List A) → P (⟨ x ⟩ ^ xs ^ ys) (xs ^ ⟨ x ⟩ ^ ys)
 push-in x xs ys = sbt x (xs ^ ys) (xs ^ ⟨ x ⟩ ^ ys) (xs , ys , refl-law , refl)
 
 -- | depends on just only refl-law
-push-out : {A : Set}(x : A)(xs ys : List A) → P (xs ^ ⟨ x ⟩ ^ ys) (x ∷ xs ^ ys)
+push-out : {A : Set}(x : A)(xs ys : List A) → P (xs ^ ⟨ x ⟩ ^ ys) (⟨ x ⟩ ^ xs ^ ys)
 push-out x ⟨⟩ ⟨⟩ = sbt x ⟨⟩ (x ∷ ⟨⟩) (⟨⟩ , ⟨⟩ , nil ⟨⟩ refl , refl)
 push-out x ⟨⟩ (y ∷ ys) = refl-law
 push-out x (x₁ ∷ xs) ys = sbt x₁ (xs ^ ⟨ x ⟩ ^ ys) (⟨ x ⟩ ^ ⟨ x₁ ⟩ ^ (xs ^ ys)) (⟨ x ⟩ , xs ^ ys , push-out x xs ys , refl)
