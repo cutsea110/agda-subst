@@ -45,11 +45,15 @@ sym-law {xs = x ∷ xs} (sbt .x .xs .(p₁ ^ x ∷ p₂) (p₁ , p₂ , p₃ , r
 sym-law {_} {x ∷ xs} (sbt .x .xs .(⟨⟩ ^ ⟨ x ⟩ ^ p₂) (⟨⟩ , p₂ , p₃ , refl))
   | sbt .x .p₂ .(x ∷ p₂) x₁ = congP (sym-law p₃)
 sym-law {_} {x ∷ xs} (sbt .x .xs .((x₁ ∷ p₁) ^ ⟨ x ⟩ ^ p₂) (x₁ ∷ p₁ , p₂ , p₃ , refl))
-  | sbt .x .(x₁ ∷ p₁ ^ p₂) .(x₁ ∷ p₁ ^ x ∷ p₂) (q₁ , q₂ , q₃ , q₄) = {!!}
+  | sbt .x .(x₁ ∷ p₁ ^ p₂) .(x₁ ∷ p₁ ^ x ∷ p₂) (q₁ , q₂ , q₃ , q₄) with congP {x = x} (trans-law p₃ (push-in x₁ p₁ p₂)) | swap-far x x₁ p₁ p₂
+... | r₁ | r₂ = {!!}
 
+trans-law {xs = .⟨⟩} {.⟨⟩} {zs} (nil .⟨⟩ refl) q = q
+trans-law {xs = .(x ∷ s)} {.t} {zs} (sbt x s t (p₁ , p₂ , p₃ , p₄)) q = {!!}
 
-
+{--
 trans-law (nil .⟨⟩ refl) q = q
 trans-law (sbt x s .⟨⟩ (⟨⟩ , proj₂ , proj₃ , ())) (nil .⟨⟩ refl)
 trans-law (sbt x s .⟨⟩ ((x₁ ∷ proj₁) , proj₂ , proj₃ , ())) (nil .⟨⟩ refl)
 trans-law (sbt x s .(y ∷ t) (p₁ , p₂ , p₃ , p₄)) (sbt y t .(q₁ ^ ⟨ y ⟩ ^ q₂) (q₁ , q₂ , q₃ , refl)) = {!!}
+--}
