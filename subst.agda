@@ -15,6 +15,11 @@ trans-law : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
 push-in : {A : Set}(x : A)(xs ys : List A) → P (x ∷ xs ^ ys) (xs ^ ⟨ x ⟩ ^ ys)
 push-in x xs ys = sbt x (xs ^ ys) (xs ^ ⟨ x ⟩ ^ ys) (xs , ys , refl-law , refl)
 
+push-out : {A : Set}(x : A)(xs ys : List A) → P (xs ^ ⟨ x ⟩ ^ ys) (x ∷ xs ^ ys)
+push-out x ⟨⟩ ⟨⟩ = sbt x ⟨⟩ (x ∷ ⟨⟩) (⟨⟩ , ⟨⟩ , nil ⟨⟩ refl , refl)
+push-out x ⟨⟩ (y ∷ ys) = refl-law
+push-out x (x₁ ∷ xs) ys = sbt x₁ (xs ^ ⟨ x ⟩ ^ ys) (⟨ x ⟩ ^ ⟨ x₁ ⟩ ^ (xs ^ ys)) (⟨ x ⟩ , xs ^ ys , push-out x xs ys , refl)
+
 swap : {A : Set}(x y : A)(xs : List A) → P (x ∷ y ∷ xs) (y ∷ x ∷ xs)
 swap x y xs = push-in x (⟨ y ⟩) xs
 
