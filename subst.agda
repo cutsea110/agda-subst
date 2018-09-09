@@ -1,16 +1,4 @@
-data List (A : Set) : Set where
-  ⟨⟩ : List A
-  _∷_ : A → List A → List A
-
-⟨_⟩ : {A : Set} → (x : A) → List A
-⟨ x ⟩ = x ∷ ⟨⟩
-
-_^_ : {A : Set} → List A → List A → List A
-⟨⟩ ^ ys = ys
-(x ∷ xs) ^ ys = x ∷ (xs ^ ys)
-
-infixl 6 _^_
-
+open import Data.List renaming ([] to ⟨⟩; [_] to ⟨_⟩; _++_ to _^_)
 open import Relation.Binary.PropositionalEquality as PropEq
 open import Data.Product using (∃; _,_) renaming (_×_ to _∧_)
 open import Data.Empty
@@ -70,6 +58,7 @@ assoc-list (x ∷ xs) ys zs = cong (x ∷_) (assoc-list xs ys zs)
 sym-law {xs = ⟨⟩} {.⟨⟩} (nil .⟨⟩ prf) = nil ⟨⟩ refl
 sym-law {xs = x ∷ xs} {.⟨⟩} (nil .(x ∷ xs) ())
 sym-law {xs = x ∷ xs} {.(p₁ ^ ⟨ x ⟩ ^ p₂)} (sbt .x .xs .(p₁ ^ ⟨ x ⟩ ^ p₂) (p₁ , p₂ , p₃ , refl)) = {!!}
+
 
 
 trans-law (nil .⟨⟩ refl) q = q
