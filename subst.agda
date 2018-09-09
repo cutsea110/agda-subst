@@ -8,7 +8,11 @@ data P {A : Set} : List A → List A → Set where
         → (∃ λ u → ∃ λ v → P s (u ^ v) ∧ t ≡ u ^ ⟨ x ⟩ ^ v)
         → P (⟨ x ⟩ ^ s) t
 
+-- | independent
 refl-law : {A : Set} {xs : List A} → P xs xs
+refl-law {xs = ⟨⟩} = nil ⟨⟩ refl
+refl-law {xs = x ∷ xs} = sbt x xs (x ∷ xs) (⟨⟩ , xs , refl-law , refl)
+
 sym-law : {A : Set} {xs ys : List A} → P xs ys → P ys xs
 trans-law : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
 
@@ -41,10 +45,6 @@ exch v w ⟨⟩ (x ∷ ys) = swap v w (x ∷ ys)
 exch v w (x ∷ xs) ys with add x (exch v w xs ys)
 ... | prf with swap v x (xs ^ w ∷ ys) | swap x w (xs ^ v ∷ ys)
 ... | sw₁ | sw₂ = trans-law (trans-law sw₁ prf) sw₂
-
--- | independent
-refl-law {xs = ⟨⟩} = nil ⟨⟩ refl
-refl-law {xs = x ∷ xs} = sbt x xs (x ∷ xs) (⟨⟩ , xs , refl-law , refl)
 
 sym-law {xs = ⟨⟩} (nil .⟨⟩ refl) = nil ⟨⟩ refl
 sym-law {xs = x ∷ xs} (nil .(x ∷ xs) ())
