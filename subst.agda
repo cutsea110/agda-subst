@@ -35,9 +35,6 @@ exch v w (x ∷ xs) ys with add x (exch v w xs ys)
 
 refl-law {xs = ⟨⟩} = nil ⟨⟩ refl
 refl-law {xs = x ∷ xs} = sbt x xs (x ∷ xs) (⟨⟩ , xs , refl-law , refl)
--- assoc-list : {A : Set}(xs ys zs : List A) → xs ^ (ys ^ zs) ≡ (xs ^ ys) ^ zs
--- assoc-list ⟨⟩ ys zs = refl
--- assoc-list (x ∷ xs) ys zs = cong (x ∷_) (assoc-list xs ys zs)
 
 sym-law {xs = ⟨⟩} (nil .⟨⟩ refl) = nil ⟨⟩ refl
 sym-law {xs = x ∷ xs} (nil .(x ∷ xs) ())
