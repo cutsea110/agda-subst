@@ -39,6 +39,12 @@ refl-law : {A : Set} {xs : List A} → P xs xs
 sym-law : {A : Set} {xs ys : List A} → P xs ys → P ys xs
 trans-law : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
 
+push-in : {A : Set}(x : A)(xs ys : List A) → P (x ∷ xs ^ ys) (xs ^ ⟨ x ⟩ ^ ys)
+push-in x xs ys = {!!}
+
+push-out : {A : Set}(x : A)(xs ys : List A) → P (xs ^ ⟨ x ⟩ ^ ys) (x ∷ xs ^ ys)
+push-out x xs ys = sym-law (push-in x xs ys)
+
 refl-law {xs = ⟨⟩} = nil ⟨⟩ refl
 refl-law {xs = x ∷ xs} = sbt x xs (x ∷ xs) (⟨⟩ , xs , refl-law , refl)
 
@@ -46,38 +52,15 @@ cong-P : {A : Set}{x y : A}{xs ys : List A} → x ≡ y → P xs ys → P (x ∷
 cong-P {x = x} refl (nil .⟨⟩ refl) = sbt x ⟨⟩ (x ∷ ⟨⟩) (⟨⟩ , ⟨⟩ , nil ⟨⟩ refl , refl)
 cong-P {x = x} refl (sbt x₁ s t x₂) = sbt x (x₁ ∷ s) (x ∷ t) (⟨⟩ , t , sbt x₁ s t x₂ , refl)
 
-lemma₃ : {A : Set}(w : A)(xs ys zs : List A) → P (w ∷ (xs ^ ys)) zs → P (xs ^ ⟨ w ⟩ ^ ys) zs
-lemma₃ = {!!}
+assoc-list : {A : Set}(xs ys zs : List A) → xs ^ (ys ^ zs) ≡ (xs ^ ys) ^ zs
+assoc-list ⟨⟩ ys zs = refl
+assoc-list (x ∷ xs) ys zs = cong (x ∷_) (assoc-list xs ys zs)
 
-lemma₂ : {A : Set}(w : A)(xs ys us vs : List A) → P (xs ^ ys) (us ^ vs) → P (xs ^ ⟨ w ⟩ ^ ys) (us ^ ⟨ w ⟩ ^ vs)
-lemma₂ w xs ys us vs prf with cong-P {x = w} {y = w} refl prf
-... | p = lemma₃ w xs ys (us ^ (w ∷ ⟨⟩) ^ vs) (sbt w (xs ^ ys) (us ^ (w ∷ ⟨⟩) ^ vs) (us , vs , prf , refl))
-
-lemma₁ : {A : Set}(w : A)(xs ys zs : List A) → P (w ∷ (xs ^ ys)) zs → P (xs ^ ⟨ w ⟩ ^ ys) zs
-lemma₁ w ⟨⟩ ys zs prf = prf
-lemma₁ w (x ∷ xs) ys .⟨⟩ (nil .(w ∷ (x ∷ (xs ^ ys))) ())
-lemma₁ w (x ∷ xs) ys zs (sbt .w .(x ∷ (xs ^ ys)) .zs (proj₁ , proj₂ , proj₃ , proj₄))
-  rewrite proj₄ with cong-P {x = w} {y = w} refl proj₃
-... | prf = lemma₂ w (x ∷ xs) ys proj₁ proj₂ proj₃
-
-lemma₀ : {A : Set}(v w : A)(xs ys zs : List A) → P (v ∷ (xs ^ ⟨ w ⟩ ^ ys)) zs → P (w ∷ (xs ^ ⟨ v ⟩ ^ ys)) zs
-lemma₀ v w xs ys .⟨⟩ (nil .(v ∷ (xs ^ (w ∷ ⟨⟩) ^ ys)) ())
-lemma₀ v w xs ys zs (sbt .v .(xs ^ (w ∷ ⟨⟩) ^ ys) .zs (proj₁ , proj₂ , proj₃ , proj₄)) with cong-P {x = v} {y = v} refl proj₃
-... | p = {!!}
-
-
-
-lemma : {A : Set}(w : A)(xs ys zs : List A) → P xs (ys ^ zs) → P (ys ^ ⟨ w ⟩ ^ zs) (w ∷ xs)
-lemma w ⟨⟩ ⟨⟩ .⟨⟩ (nil .⟨⟩ refl) = sbt w ⟨⟩ (w ∷ ⟨⟩) (⟨⟩ , ⟨⟩ , nil ⟨⟩ refl , refl)
-lemma w ⟨⟩ (x ∷ ys) zs ()
-lemma w (x ∷ xs) ⟨⟩ .⟨⟩ (nil .(x ∷ xs) ())
-lemma w (x ∷ xs) ⟨⟩ zs (sbt .x .xs .zs (proj₁ , proj₂ , proj₃ , proj₄)) rewrite proj₄
-  = cong-P refl (lemma x xs proj₁ proj₂ proj₃)
-lemma w (x ∷ xs) (y ∷ ys) zs prf = lemma₀ w y ys zs (w ∷ (x ∷ xs)) (cong-P refl (lemma₁ y ys zs (x ∷ xs) (sym-law prf)))
-
-sym-law {xs = ⟨⟩} {.⟨⟩} (nil .⟨⟩ refl) = nil ⟨⟩ refl
+sym-law {xs = ⟨⟩} {.⟨⟩} (nil .⟨⟩ prf) = nil ⟨⟩ refl
 sym-law {xs = x ∷ xs} {.⟨⟩} (nil .(x ∷ xs) ())
-sym-law {xs = x ∷ xs} {.(proj₁ ^ (x ∷ ⟨⟩) ^ proj₂)} (sbt .x .xs .(proj₁ ^ (x ∷ ⟨⟩) ^ proj₂) (proj₁ , proj₂ , proj₃ , refl))
-  = lemma x xs proj₁ proj₂ proj₃
+sym-law {xs = x ∷ xs} {.t} (sbt .x .xs t (proj₁ , proj₂ , proj₃ , proj₄)) = ?
 
-trans-law p q = {!!}
+trans-law (nil .⟨⟩ refl) q = q
+trans-law (sbt x s .⟨⟩ (⟨⟩ , proj₂ , proj₃ , ())) (nil .⟨⟩ refl)
+trans-law (sbt x s .⟨⟩ ((x₁ ∷ proj₁) , proj₂ , proj₃ , ())) (nil .⟨⟩ refl)
+trans-law (sbt x s .(y ∷ t) (p₁ , p₂ , p₃ , p₄)) (sbt y t .(q₁ ^ ⟨ y ⟩ ^ q₂) (q₁ , q₂ , q₃ , refl)) = {!!}
