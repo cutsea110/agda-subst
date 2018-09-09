@@ -12,15 +12,26 @@ refl-law : {A : Set} {xs : List A} → P xs xs
 sym-law : {A : Set} {xs ys : List A} → P xs ys → P ys xs
 trans-law : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
 
+congP : {A : Set}{x : A}{xs ys : List A} → P xs ys → P (x ∷ xs) (x ∷ ys)
+congP {x = x} (nil .⟨⟩ refl) = sbt x ⟨⟩ (x ∷ ⟨⟩) (⟨⟩ , ⟨⟩ , nil ⟨⟩ refl , refl)
+congP {x = x} (sbt x₁ s t x₂) = sbt x (x₁ ∷ s) (x ∷ t) (⟨⟩ , t , sbt x₁ s t x₂ , refl)
+
 push-in : {A : Set}(x : A)(xs ys : List A) → P (x ∷ xs ^ ys) (xs ^ ⟨ x ⟩ ^ ys)
 push-in x xs ys = sbt x (xs ^ ys) (xs ^ ⟨ x ⟩ ^ ys) (xs , ys , refl-law , refl)
 
 swap : {A : Set}(x y : A)(xs : List A) → P (x ∷ y ∷ xs) (y ∷ x ∷ xs)
 swap x y xs = push-in x (⟨ y ⟩) xs
 
-cong-P : {A : Set}{x y : A}{xs ys : List A} → x ≡ y → P xs ys → P (x ∷ xs) (y ∷ ys)
-cong-P {x = x} refl (nil .⟨⟩ refl) = sbt x ⟨⟩ (x ∷ ⟨⟩) (⟨⟩ , ⟨⟩ , nil ⟨⟩ refl , refl)
-cong-P {x = x} refl (sbt x₁ s t x₂) = sbt x (x₁ ∷ s) (x ∷ t) (⟨⟩ , t , sbt x₁ s t x₂ , refl)
+swap-far : {A : Set}(v w : A)(xs ys : List A) → P (v ∷ xs ^ ⟨ w ⟩ ^ ys) (w ∷ xs ^ ⟨ v ⟩ ^ ys)
+swap-far v w ⟨⟩ ⟨⟩ = sbt v (w ∷ ⟨⟩) (w ∷ v ∷ ⟨⟩) (w ∷ ⟨⟩ , ⟨⟩ , sbt w ⟨⟩ (w ∷ ⟨⟩) (⟨⟩ , ⟨⟩ , nil ⟨⟩ refl , refl) , refl)
+swap-far v w ⟨⟩ (x ∷ ys) = swap v w (x ∷ ys)
+swap-far v w (x ∷ xs) ys with congP {x = x} (swap-far v w xs ys)
+... | prf with swap v x (xs ^ w ∷ ys) | swap x w (xs ^ v ∷ ys)
+... | sw₁ | sw₂ = trans-law (trans-law sw₁ prf) sw₂
+
+-- cong-P : {A : Set}{x y : A}{xs ys : List A} → x ≡ y → P xs ys → P (x ∷ xs) (y ∷ ys)
+-- cong-P {x = x} refl (nil .⟨⟩ refl) = sbt x ⟨⟩ (x ∷ ⟨⟩) (⟨⟩ , ⟨⟩ , nil ⟨⟩ refl , refl)
+-- cong-P {x = x} refl (sbt x₁ s t x₂) = sbt x (x₁ ∷ s) (x ∷ t) (⟨⟩ , t , sbt x₁ s t x₂ , refl)
 
 down : {A : Set}(x : A)(xs ys : List A) → P (x ∷ xs) (x ∷ ys) → P xs ys
 down x xs ys (sbt .x .xs .(x ∷ ys) (⟨⟩ , .ys , p₃ , refl)) = p₃
@@ -32,15 +43,14 @@ refl-law {xs = x ∷ xs} = sbt x xs (x ∷ xs) (⟨⟩ , xs , refl-law , refl)
 -- assoc-list ⟨⟩ ys zs = refl
 -- assoc-list (x ∷ xs) ys zs = cong (x ∷_) (assoc-list xs ys zs)
 
--- sym-law {xs = ⟨⟩} {.⟨⟩} (nil .⟨⟩ prf) = nil ⟨⟩ refl
--- sym-law {xs = x ∷ xs} {.⟨⟩} (nil .(x ∷ xs) ())
--- sym-law {xs = x ∷ xs} {.(p₁ ^ ⟨ x ⟩ ^ p₂)} (sbt .x .xs .(p₁ ^ ⟨ x ⟩ ^ p₂) (p₁ , p₂ , p₃ , refl)) = {!!}
 sym-law {xs = ⟨⟩} (nil .⟨⟩ refl) = nil ⟨⟩ refl
 sym-law {xs = x ∷ xs} (nil .(x ∷ xs) ())
 sym-law {xs = x ∷ xs} (sbt .x .xs .(p₁ ^ x ∷ p₂) (p₁ , p₂ , p₃ , refl)) with push-in x p₁ p₂
-sym-law {_} {x ∷ xs} (sbt .x .xs .(⟨⟩ ^ ⟨ x ⟩ ^ p₂) (⟨⟩ , p₂ , p₃ , refl)) | sbt .x .p₂ .(x ∷ p₂) x₁
-  = cong-P {x = x} {y = x} refl (sym-law p₃)
-sym-law {_} {x ∷ xs} (sbt .x .xs .((x₁ ∷ p₁) ^ ⟨ x ⟩ ^ p₂) (x₁ ∷ p₁ , p₂ , p₃ , refl)) | prf = {!!}
+sym-law {_} {x ∷ xs} (sbt .x .xs .(⟨⟩ ^ ⟨ x ⟩ ^ p₂) (⟨⟩ , p₂ , p₃ , refl))
+  | sbt .x .p₂ .(x ∷ p₂) x₁ = congP (sym-law p₃)
+sym-law {_} {x ∷ xs} (sbt .x .xs .((x₁ ∷ p₁) ^ ⟨ x ⟩ ^ p₂) (x₁ ∷ p₁ , p₂ , p₃ , refl))
+  | sbt .x .(x₁ ∷ p₁ ^ p₂) .(x₁ ∷ p₁ ^ x ∷ p₂) (q₁ , q₂ , q₃ , q₄) = {!!}
+
 
 
 trans-law (nil .⟨⟩ refl) q = q
