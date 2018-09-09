@@ -1,7 +1,6 @@
 open import Data.List renaming ([] to ⟨⟩; [_] to ⟨_⟩; _++_ to _^_)
 open import Relation.Binary.PropositionalEquality as PropEq
 open import Data.Product using (∃; _,_) renaming (_×_ to _∧_)
-open import Data.Empty
 
 data P {A : Set} : List A → List A → Set where
   nil : (s : List A) → (prf : s ≡ ⟨⟩) → P s ⟨⟩
