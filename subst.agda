@@ -41,8 +41,8 @@ assoc-list (x ∷ xs) ys zs = cong (x ∷_) (assoc-list xs ys zs)
 
 add : {A : Set}{xs ys : List A}(x : A) → P xs ys → P (xs ^ ⟨ x ⟩) (ys ^ ⟨ x ⟩)
 add x (nil .⟨⟩ refl) = sbt x ⟨⟩ (x ∷ ⟨⟩) (⟨⟩ , ⟨⟩ , nil ⟨⟩ refl , refl)
-add x (sbt x₁ s .(p₁ ^ x₁ ∷ p₂) (p₁ , p₂ , p₃ , refl)) = ?
-
+add x (sbt x₁ s .(p₁ ^ x₁ ∷ p₂) (p₁ , p₂ , p₃ , refl))
+  = sbt x₁ (s ^ ⟨ x ⟩) ((p₁ ^ ⟨ x₁ ⟩ ^ p₂) ^ ⟨ x ⟩) (p₁ , p₂ ^ ⟨ x ⟩ , {!!} , assoc-list p₁ (⟨ x₁ ⟩ ^ p₂) ⟨ x ⟩)
 
 del : {A : Set}(x : A)(xs ys : List A) → P (x ∷ xs) (x ∷ ys) → P xs ys
 del x xs ys (sbt .x .xs .(x ∷ ys) (⟨⟩ , .ys , p₃ , refl)) = p₃
