@@ -59,21 +59,10 @@ exch v w (x ∷ xs) ys with ins x (exch v w xs ys)
 ... | prf with swap v x (xs ^ w ∷ ys) | swap x w (xs ^ v ∷ ys)
 ... | sw₁ | sw₂ = trans-law (trans-law sw₁ prf) sw₂
 
-sym-law {xs = ⟨⟩} (nil .⟨⟩ refl) = nil ⟨⟩ refl
-sym-law {xs = x ∷ xs} (nil .(x ∷ xs) ())
-sym-law {xs = x ∷ xs} (sbt .x .xs .(p₁ ^ x ∷ p₂) (p₁ , p₂ , p₃ , refl)) with push-in x p₁ p₂
-sym-law {_} {x ∷ xs} (sbt .x .xs .(⟨⟩ ^ ⟨ x ⟩ ^ p₂) (⟨⟩ , p₂ , p₃ , refl))
-  | sbt .x .p₂ .(x ∷ p₂) x₁ = ins x (sym-law p₃)
-sym-law {_} {x ∷ xs} (sbt .x .xs .((x₁ ∷ p₁) ^ ⟨ x ⟩ ^ p₂) (x₁ ∷ p₁ , p₂ , p₃ , refl))
-  | sbt .x .(x₁ ∷ p₁ ^ p₂) .(x₁ ∷ p₁ ^ x ∷ p₂) (q₁ , q₂ , q₃ , q₄) = {!!}
+sym-law {xs = ⟨⟩} {.⟨⟩} (nil .⟨⟩ refl) = nil ⟨⟩ refl
+sym-law {xs = x ∷ xs} {.⟨⟩} (nil .(x ∷ xs) ())
+sym-law {xs = x ∷ xs} {.(p₁ ^ x ∷ p₂)} (sbt .x .xs .(p₁ ^ x ∷ p₂) (p₁ , p₂ , p₃ , refl))
+  with push-out x p₁ p₂ | ins x (sym-law p₃)
+... | q₁ | q₂ = trans-law q₁ q₂
 
-trans-law {xs = .⟨⟩} {.⟨⟩} {zs} (nil .⟨⟩ refl) q = q
-trans-law {xs = .(x ∷ s)} {.⟨⟩} {.⟨⟩} (sbt x s .⟨⟩ (⟨⟩ , p₂ , p₃ , ())) (nil .⟨⟩ refl)
-trans-law {xs = .(x ∷ s)} {.⟨⟩} {.⟨⟩} (sbt x s .⟨⟩ (x₁ ∷ p₁ , p₂ , p₃ , ())) (nil .⟨⟩ refl)
-trans-law {xs = .(x₁ ∷ ⟨⟩)} {.(x₁ ∷ ⟨⟩)} {.t} (sbt .x₁ .⟨⟩ .(x₁ ∷ ⟨⟩) (⟨⟩ , .⟨⟩ , nil .⟨⟩ refl , refl)) (sbt x₁ .⟨⟩ t (q₁ , q₂ , q₃ , q₄))
-  = sbt x₁ ⟨⟩ t (q₁ , q₂ , q₃ , q₄)
-trans-law {xs = .(x₁ ∷ x ∷ s)} {.(x₁ ∷ s₁)} {.t} (sbt .x₁ .(x ∷ s) .(x₁ ∷ s₁) (⟨⟩ , .s₁ , sbt x s .s₁ x₂ , refl)) (sbt x₁ s₁ t (q₁ , q₂ , q₃ , q₄))
-  = sbt x₁ (x ∷ s) t (q₁ , q₂ , trans-law (sbt x s s₁ x₂) q₃ , q₄)
-trans-law {xs = .(x ∷ s)} {.(x₁ ∷ p₁ ^ x ∷ p₂)} {.(q₁ ^ x₁ ∷ q₂)} (sbt x s .(x₁ ∷ p₁ ^ x ∷ p₂) (.x₁ ∷ p₁ , p₂ , p₃ , refl)) (sbt x₁ .(p₁ ^ x ∷ p₂) .(q₁ ^ x₁ ∷ q₂) (q₁ , q₂ , q₃ , refl)) = {!!}
-
-
+trans-law {xs = xs} {ys} {zs} p q = ?
