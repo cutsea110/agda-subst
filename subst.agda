@@ -76,4 +76,4 @@ trans-law {xs = .(x ∷ s)} {.⟨⟩} {.⟨⟩} (sbt x s .⟨⟩ (proj₁ , proj
   = ⊥-elim (⟨⟩≢xs^w∷ys x proj₁ proj₂ proj₄)
 trans-law {xs = .(x₂ ∷ s)} {.(x₂ ∷ s₁)} {.t} (sbt .x₂ s .(x₂ ∷ s₁) (⟨⟩ , .s₁ , q₃ , refl)) (sbt x₂ s₁ t (r₁ , r₂ , r₃ , r₄))
   = sbt x₂ s t (r₁ , r₂ , trans-law q₃ r₃ , r₄)
-trans-law {xs = .(x ∷ s)} {.(x₂ ∷ p₁ ^ x ∷ p₂)} {.(r₁ ^ x₂ ∷ r₂)} (sbt x s .(x₂ ∷ p₁ ^ x ∷ p₂) (.x₂ ∷ p₁ , p₂ , q₃ , refl)) (sbt x₂ .(p₁ ^ x ∷ p₂) .(r₁ ^ x₂ ∷ r₂) (r₁ , r₂ , r₃ , refl)) = {!!}
+trans-law {xs = .(x ∷ s)} {.(x₂ ∷ p₁ ^ x ∷ p₂)} {.(r₁ ^ x₂ ∷ r₂)} (sbt x s .(x₂ ∷ p₁ ^ x ∷ p₂) (.x₂ ∷ p₁ , p₂ , q₃ , refl)) (sbt x₂ .(p₁ ^ x ∷ p₂) .(r₁ ^ x₂ ∷ r₂) (r₁ , r₂ , r₃ , refl)) = sbt x s (r₁ ^ x₂ ∷ r₂) ((⟨ x₂ ⟩ ^ p₁) , p₂ , q₃ , {!!})
