@@ -65,4 +65,13 @@ sym-law {xs = x ∷ xs} {.(p₁ ^ x ∷ p₂)} (sbt .x .xs .(p₁ ^ x ∷ p₂) 
   with push-out x p₁ p₂ | ins x (sym-law p₃)
 ... | q₁ | q₂ = trans-law q₁ q₂
 
-trans-law {xs = xs} {ys} {zs} p q = ?
+open import Data.Empty
+
+⟨⟩≢xs^w∷ys : {A : Set}(w : A)(xs ys : List A) → ⟨⟩ ≢ xs ^ w ∷ ys
+⟨⟩≢xs^w∷ys w ⟨⟩ ys ()
+⟨⟩≢xs^w∷ys w (x ∷ xs) ys ()
+
+trans-law {xs = .⟨⟩} {.⟨⟩} {zs} (nil .⟨⟩ refl) q = q
+trans-law {xs = .(x ∷ s)} {.⟨⟩} {.⟨⟩} (sbt x s .⟨⟩ (proj₁ , proj₂ , proj₃ , proj₄)) (nil .⟨⟩ refl)
+  = ⊥-elim (⟨⟩≢xs^w∷ys x proj₁ proj₂ proj₄)
+trans-law {xs = .(x ∷ s)} {.(x₂ ∷ s₁)} {.t} (sbt x s .(x₂ ∷ s₁) x₁) (sbt x₂ s₁ t x₃) = {!!}
