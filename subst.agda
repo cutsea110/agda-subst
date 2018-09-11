@@ -74,5 +74,4 @@ open import Data.Empty
 trans-law {xs = .⟨⟩} {⟨⟩} {zs} (nil .⟨⟩ refl) q = q
 trans-law {xs = .(x ∷ s)} {⟨⟩} {zs} (sbt x s .⟨⟩ (p₁ , p₂ , p₃ , p₄)) q = ⊥-elim (⟨⟩≢xs^w∷ys x p₁ p₂ p₄)
 trans-law {xs = xs} {x ∷ ys} {.⟨⟩} p (nil .(x ∷ ys) ())
-trans-law {xs = .(x ∷ s)} {x ∷ ys} {.(q₁ ^ x ∷ q₂)} (sbt .x s .(x ∷ ys) (⟨⟩ , .ys , p₃ , refl)) (sbt .x .ys .(q₁ ^ x ∷ q₂) (q₁ , q₂ , q₃ , refl)) = sbt x s (q₁ ^ x ∷ q₂) (q₁ , q₂ , trans-law p₃ q₃ , refl)
-trans-law {xs = .(x₁ ∷ s)} {x ∷ ys} {.(q₁ ^ x ∷ q₂)} (sbt x₁ s .(x ∷ ys) (x₂ ∷ p₁ , p₂ , p₃ , p₄)) (sbt .x .ys .(q₁ ^ x ∷ q₂) (q₁ , q₂ , q₃ , refl)) = {!!}
+trans-law {xs = xs} {x ∷ ys} {.t} p (sbt .x .ys t (p₁ , p₂ , p₃ , p₄)) = {!!}
