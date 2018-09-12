@@ -31,6 +31,7 @@ del-⟨⟩ {ys = ⟨⟩} prf = prf
 del-⟨⟩ {ys = x ∷ ys} (sbt x₁ s .(x ∷ ys ^ ⟨⟩) (p₁ , p₂ , p₃ , p₄))
   = sbt x₁ s (x ∷ ys) (p₁ , p₂ , p₃ , trans (cong (x ∷_) (sym (⟨⟩-cancel-r ys))) p₄)
 
+-- | independent (depends on ⟨⟩-cancel-r which is list level property)
 add-⟨⟩ : {A : Set}{xs ys : List A} → P xs ys → P xs (ys ^ ⟨⟩)
 add-⟨⟩ {ys = ⟨⟩} prf = prf
 add-⟨⟩ {ys = x ∷ ys} (sbt x₁ s .(x ∷ ys) (p₁ , p₂ , p₃ , p₄))
