@@ -36,10 +36,11 @@ swap : {A : Set}(x y : A)(xs : List A) → P (⟨ x ⟩ ^ ⟨ y ⟩ ^ xs) (⟨ y
 swap x y xs = push-in x (⟨ y ⟩) xs
 
 -- | independent
-ins : {A : Set}{xs ys : List A}(x : A) → P xs ys → P (⟨ x ⟩ ^ xs) (⟨ x ⟩ ^ ys)
+ins : {A : Set}(x : A){xs ys : List A} → P xs ys → P (⟨ x ⟩ ^ xs) (⟨ x ⟩ ^ ys)
 ins x (nil .⟨⟩ refl) = sbt x ⟨⟩ (x ∷ ⟨⟩) (⟨⟩ , ⟨⟩ , nil ⟨⟩ refl , refl)
 ins x (sbt x₁ s t x₂) = sbt x (x₁ ∷ s) (x ∷ t) (⟨⟩ , t , sbt x₁ s t x₂ , refl)
 
+-- | depends on list level properties only.
 add : {A : Set}{xs ys : List A}(x : A) → P xs ys → P (xs ^ ⟨ x ⟩) (ys ^ ⟨ x ⟩)
 add x (nil .⟨⟩ refl) = sbt x ⟨⟩ (x ∷ ⟨⟩) (⟨⟩ , ⟨⟩ , nil ⟨⟩ refl , refl)
 add x (sbt x₁ s .(p₁ ^ x₁ ∷ p₂) (p₁ , p₂ , p₃ , refl))
