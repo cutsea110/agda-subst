@@ -13,6 +13,10 @@ assoc-list : {A : Set}(x y z : List A) → (x ^ y) ^ z ≡ x ^ (y ^ z)
 assoc-list ⟨⟩ ys zs = refl
 assoc-list (x ∷ xs) ys zs = cong (x ∷_) (assoc-list xs ys zs)
 
+⟨⟩-cancel-r : {A : Set}(xs : List A) → xs ^ ⟨⟩ ≡ xs
+⟨⟩-cancel-r ⟨⟩ = refl
+⟨⟩-cancel-r (x ∷ xs) = cong (x ∷_) (⟨⟩-cancel-r xs)
+
 -- | independent
 refl-law : {A : Set} {xs : List A} → P xs xs
 refl-law {xs = ⟨⟩} = nil ⟨⟩ refl
@@ -20,6 +24,12 @@ refl-law {xs = x ∷ xs} = sbt x xs (x ∷ xs) (⟨⟩ , xs , refl-law , refl)
 
 sym-law : {A : Set} {xs ys : List A} → P xs ys → P ys xs
 trans-law : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
+
+-- | independent (depends on ⟨⟩-cancel-r which is list level property)
+triv : {A : Set}{xs ys : List A} → P xs (ys ^ ⟨⟩) → P xs ys
+triv {ys = ⟨⟩} prf = prf
+triv {ys = x ∷ ys} (sbt x₁ s .(x ∷ ys ^ ⟨⟩) (p₁ , p₂ , p₃ , p₄))
+  = sbt x₁ s (x ∷ ys) (p₁ , p₂ , p₃ , trans (cong (x ∷_) (sym (⟨⟩-cancel-r ys))) p₄)
 
 -- | depends on just only refl-law
 push-in : {A : Set}(x : A)(xs ys : List A) → P (⟨ x ⟩ ^ xs ^ ys) (xs ^ ⟨ x ⟩ ^ ys)
@@ -53,6 +63,9 @@ add x (sbt x₁ s .(p₁ ^ x₁ ∷ p₂) (p₁ , p₂ , p₃ , refl))
   where
     help : {A : Set} (p₁ p₂ s : List A) {x : A} → P (s ^ ⟨ x ⟩) ((p₁ ^ p₂) ^ ⟨ x ⟩) → P (s ^ ⟨ x ⟩) (p₁ ^ p₂ ^ ⟨ x ⟩)
     help p₁ p₂ s {x} p rewrite assoc-list p₁ p₂ ⟨ x ⟩ = p
+
+add' : {A : Set}(xs ys zs : List A) → P xs ys → P (xs ^ zs) (ys ^ zs)
+add' xs ys zs prf  = {!!}
 
 del : {A : Set}(x : A)(xs ys : List A) → P (x ∷ xs) (x ∷ ys) → P xs ys
 del x xs ys (sbt .x .xs .(x ∷ ys) (⟨⟩ , .ys , p₃ , refl)) = p₃
