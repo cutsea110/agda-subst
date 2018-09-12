@@ -26,9 +26,9 @@ sym-law : {A : Set} {xs ys : List A} → P xs ys → P ys xs
 trans-law : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
 
 -- | independent (depends on ⟨⟩-cancel-r which is list level property)
-triv : {A : Set}{xs ys : List A} → P xs (ys ^ ⟨⟩) → P xs ys
-triv {ys = ⟨⟩} prf = prf
-triv {ys = x ∷ ys} (sbt x₁ s .(x ∷ ys ^ ⟨⟩) (p₁ , p₂ , p₃ , p₄))
+del-⟨⟩ : {A : Set}{xs ys : List A} → P xs (ys ^ ⟨⟩) → P xs ys
+del-⟨⟩ {ys = ⟨⟩} prf = prf
+del-⟨⟩ {ys = x ∷ ys} (sbt x₁ s .(x ∷ ys ^ ⟨⟩) (p₁ , p₂ , p₃ , p₄))
   = sbt x₁ s (x ∷ ys) (p₁ , p₂ , p₃ , trans (cong (x ∷_) (sym (⟨⟩-cancel-r ys))) p₄)
 
 -- | depends on just only refl-law
