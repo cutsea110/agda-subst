@@ -50,11 +50,17 @@ add-⟨⟩-l {xs = x ∷ xs} (nil .(x ∷ xs) ())
 add-⟨⟩-l {xs = x ∷ xs} (sbt .x .xs t (p₁ , p₂ , p₃ , p₄)) = sbt x (xs ^ ⟨⟩) t (p₁ , p₂ , add-⟨⟩-l p₃ , p₄)
 
 -- | independent
-assoc-l :  {A : Set}{xs ys zs ws : List A} → P (xs ^ (ys ^ zs)) ws → P ((xs ^ ys) ^ zs) ws
+assoc-l : {A : Set}{xs ys zs ws : List A} → P (xs ^ (ys ^ zs)) ws → P ((xs ^ ys) ^ zs) ws
 assoc-l {xs = ⟨⟩} {ys} {zs} prf = prf
 assoc-l {xs = x ∷ xs} {ys} {zs} (nil .(x ∷ xs ^ ys ^ zs) ())
 assoc-l {xs = x ∷ xs} {ys} {zs} (sbt .x .(xs ^ ys ^ zs) t (p₁ , p₂ , p₃ , p₄))
   = sbt x ((xs ^ ys) ^ zs) t (p₁ , p₂ , assoc-l {xs = xs}{ys}{zs} p₃ , p₄)
+
+-- | independent (depends on assoc-list which is list level property)
+assoc-r : {A : Set}{xs ys zs ws : List A} → P ws (xs ^ (ys ^ zs)) → P ws ((xs ^ ys) ^ zs)
+assoc-r {xs = ⟨⟩} {ys} {zs} prf = prf
+assoc-r {xs = x ∷ xs} {ys} {zs} (sbt x₁ s .(x ∷ xs ^ ys ^ zs) (p₁ , p₂ , p₃ , p₄))
+  = sbt x₁ s (x ∷ (xs ^ ys) ^ zs) (p₁ , p₂ , p₃ , trans (cong (x ∷_) (assoc-list xs ys zs)) p₄)
 
 -- | depends on just only refl-law
 push-in : {A : Set}(x : A)(xs ys : List A) → P (⟨ x ⟩ ^ xs ^ ys) (xs ^ ⟨ x ⟩ ^ ys)
