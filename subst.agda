@@ -26,10 +26,10 @@ push-in : {A : Set}(x : A)(xs ys : List A) → P (⟨ x ⟩ ^ xs ^ ys) (xs ^ ⟨
 push-in x xs ys = sbt x (xs ^ ys) (xs ^ ⟨ x ⟩ ^ ys) (xs , ys , refl-law , refl)
 
 -- | depends on just only refl-law
-push-out : {A : Set}(x : A)(xs ys : List A) → P (xs ^ ⟨ x ⟩ ^ ys) (⟨ x ⟩ ^ xs ^ ys)
-push-out x ⟨⟩ ⟨⟩ = sbt x ⟨⟩ (x ∷ ⟨⟩) (⟨⟩ , ⟨⟩ , nil ⟨⟩ refl , refl)
-push-out x ⟨⟩ (y ∷ ys) = refl-law
-push-out x (x₁ ∷ xs) ys = sbt x₁ (xs ^ ⟨ x ⟩ ^ ys) (⟨ x ⟩ ^ ⟨ x₁ ⟩ ^ (xs ^ ys)) (⟨ x ⟩ , xs ^ ys , push-out x xs ys , refl)
+pull-out : {A : Set}(x : A)(xs ys : List A) → P (xs ^ ⟨ x ⟩ ^ ys) (⟨ x ⟩ ^ xs ^ ys)
+pull-out x ⟨⟩ ⟨⟩ = sbt x ⟨⟩ (x ∷ ⟨⟩) (⟨⟩ , ⟨⟩ , nil ⟨⟩ refl , refl)
+pull-out x ⟨⟩ (y ∷ ys) = refl-law
+pull-out x (x₁ ∷ xs) ys = sbt x₁ (xs ^ ⟨ x ⟩ ^ ys) (⟨ x ⟩ ^ ⟨ x₁ ⟩ ^ (xs ^ ys)) (⟨ x ⟩ , xs ^ ys , pull-out x xs ys , refl)
 
 -- | depends on just only refl-law
 swap : {A : Set}(x y : A)(xs : List A) → P (⟨ x ⟩ ^ ⟨ y ⟩ ^ xs) (⟨ y ⟩ ^ ⟨ x ⟩ ^ xs)
@@ -62,7 +62,7 @@ exch v w (x ∷ xs) ys with ins x (exch v w xs ys)
 sym-law {xs = ⟨⟩} {.⟨⟩} (nil .⟨⟩ refl) = nil ⟨⟩ refl
 sym-law {xs = x ∷ xs} {.⟨⟩} (nil .(x ∷ xs) ())
 sym-law {xs = x ∷ xs} {.(p₁ ^ x ∷ p₂)} (sbt .x .xs .(p₁ ^ x ∷ p₂) (p₁ , p₂ , p₃ , refl))
-  with push-out x p₁ p₂ | ins x (sym-law p₃)
+  with pull-out x p₁ p₂ | ins x (sym-law p₃)
 ... | q₁ | q₂ = trans-law q₁ q₂
 
 open import Data.Empty
@@ -74,4 +74,5 @@ open import Data.Empty
 trans-law {xs = .⟨⟩} {⟨⟩} {zs} (nil .⟨⟩ refl) q = q
 trans-law {xs = .(x ∷ s)} {⟨⟩} {zs} (sbt x s .⟨⟩ (p₁ , p₂ , p₃ , p₄)) q = ⊥-elim (⟨⟩≢xs^w∷ys x p₁ p₂ p₄)
 trans-law {xs = xs} {x ∷ ys} {.⟨⟩} p (nil .(x ∷ ys) ())
-trans-law {xs = xs} {x ∷ ys} {.t} p (sbt .x .ys t (p₁ , p₂ , p₃ , p₄)) = {!!}
+trans-law {xs = ⟨⟩} {x ∷ ys} {.(p₁ ^ x ∷ p₂)} () (sbt .x .ys .(p₁ ^ x ∷ p₂) (p₁ , p₂ , p₃ , refl))
+trans-law {xs = x₁ ∷ xs} {x ∷ ys} {.(p₁ ^ x ∷ p₂)} (sbt .x₁ .xs .(x ∷ ys) (q₁ , q₂ , q₃ , q₄)) (sbt .x .ys .(p₁ ^ x ∷ p₂) (p₁ , p₂ , p₃ , refl)) = {!!}
