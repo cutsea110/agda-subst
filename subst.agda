@@ -40,8 +40,13 @@ ins : {A : Set}(x : A){xs ys : List A} → P xs ys → P (⟨ x ⟩ ^ xs) (⟨ x
 ins x (nil .⟨⟩ refl) = sbt x ⟨⟩ (x ∷ ⟨⟩) (⟨⟩ , ⟨⟩ , nil ⟨⟩ refl , refl)
 ins x (sbt x₁ s t x₂) = sbt x (x₁ ∷ s) (x ∷ t) (⟨⟩ , t , sbt x₁ s t x₂ , refl)
 
+-- | independent (depends on just only ins)
+ins' : {A : Set}(xs ys zs : List A) → P xs ys → P (zs ^ xs) (zs ^ ys)
+ins' xs ys ⟨⟩ prf = prf
+ins' xs ys (x ∷ zs) prf = ins x (ins' xs ys zs prf)
+
 -- | depends on list level properties only.
-add : {A : Set}{xs ys : List A}(x : A) → P xs ys → P (xs ^ ⟨ x ⟩) (ys ^ ⟨ x ⟩)
+add : {A : Set}(x : A){xs ys : List A} → P xs ys → P (xs ^ ⟨ x ⟩) (ys ^ ⟨ x ⟩)
 add x (nil .⟨⟩ refl) = sbt x ⟨⟩ (x ∷ ⟨⟩) (⟨⟩ , ⟨⟩ , nil ⟨⟩ refl , refl)
 add x (sbt x₁ s .(p₁ ^ x₁ ∷ p₂) (p₁ , p₂ , p₃ , refl))
   = sbt x₁ (s ^ ⟨ x ⟩) ((p₁ ^ ⟨ x₁ ⟩ ^ p₂) ^ ⟨ x ⟩) (p₁ , p₂ ^ ⟨ x ⟩ , help p₁ p₂ s (add x p₃) , assoc-list p₁ (⟨ x₁ ⟩ ^ p₂) ⟨ x ⟩)
