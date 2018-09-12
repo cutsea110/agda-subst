@@ -40,10 +40,10 @@ ins : {A : Set}(x : A){xs ys : List A} → P xs ys → P (⟨ x ⟩ ^ xs) (⟨ x
 ins x (nil .⟨⟩ refl) = sbt x ⟨⟩ (x ∷ ⟨⟩) (⟨⟩ , ⟨⟩ , nil ⟨⟩ refl , refl)
 ins x (sbt x₁ s t x₂) = sbt x (x₁ ∷ s) (x ∷ t) (⟨⟩ , t , sbt x₁ s t x₂ , refl)
 
--- | independent (depends on just only ins)
+-- | independent
 ins' : {A : Set}(xs ys zs : List A) → P xs ys → P (zs ^ xs) (zs ^ ys)
 ins' xs ys ⟨⟩ prf = prf
-ins' xs ys (x ∷ zs) prf = ins x (ins' xs ys zs prf)
+ins' xs ys (x ∷ zs) prf = sbt x (zs ^ xs) (x ∷ zs ^ ys) (⟨⟩ , zs ^ ys , ins' xs ys zs prf , refl)
 
 -- | depends on list level properties only.
 add : {A : Set}(x : A){xs ys : List A} → P xs ys → P (xs ^ ⟨ x ⟩) (ys ^ ⟨ x ⟩)
