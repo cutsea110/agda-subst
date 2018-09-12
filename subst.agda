@@ -120,7 +120,7 @@ add' {xs = xs} {ys} (x ∷ zs) p with add' {xs = xs ^ ⟨ x ⟩} {ys ^ ⟨ x ⟩
 ... | q = rev-assoc-l {xs = xs} {⟨ x ⟩} (rev-assoc-r {xs = ys} {⟨ x ⟩} {zs} q)
 
 exch : {A : Set}(v w : A)(xs ys : List A) → P (v ∷ xs ^ ⟨ w ⟩ ^ ys) (w ∷ xs ^ ⟨ v ⟩ ^ ys)
-exch v w xs ys with (flip ⟨ v ⟩ ⟨ w ⟩)
+exch v w xs ys with ins' xs (swap v w ys)
 ... | prf = {!!}
 
 del : {A : Set}(x : A)(xs ys : List A) → P (x ∷ xs) (x ∷ ys) → P xs ys
