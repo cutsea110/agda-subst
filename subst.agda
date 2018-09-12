@@ -43,6 +43,12 @@ add-⟨⟩-r {ys = ⟨⟩} prf = prf
 add-⟨⟩-r {ys = x ∷ ys} (sbt x₁ s .(x ∷ ys) (p₁ , p₂ , p₃ , p₄))
   = sbt x₁ s (x ∷ ys ^ ⟨⟩) (p₁ , p₂ , p₃ , trans (cong (x ∷_) (⟨⟩-cancel-r ys)) p₄)
 
+-- | independent
+add-⟨⟩-l : {A : Set}{xs ys : List A} → P xs ys → P (xs ^ ⟨⟩) ys
+add-⟨⟩-l {xs = ⟨⟩} prf = prf
+add-⟨⟩-l {xs = x ∷ xs} (nil .(x ∷ xs) ())
+add-⟨⟩-l {xs = x ∷ xs} (sbt .x .xs t (p₁ , p₂ , p₃ , p₄)) = sbt x (xs ^ ⟨⟩) t (p₁ , p₂ , add-⟨⟩-l p₃ , p₄)
+
 -- | depends on just only refl-law
 push-in : {A : Set}(x : A)(xs ys : List A) → P (⟨ x ⟩ ^ xs ^ ys) (xs ^ ⟨ x ⟩ ^ ys)
 push-in x xs ys = sbt x (xs ^ ys) (xs ^ ⟨ x ⟩ ^ ys) (xs , ys , refl-law , refl)
