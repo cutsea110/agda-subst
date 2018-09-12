@@ -108,10 +108,11 @@ add x (sbt x₁ s .(p₁ ^ x₁ ∷ p₂) (p₁ , p₂ , p₃ , refl))
     help : {A : Set} (p₁ p₂ s : List A) {x : A} → P (s ^ ⟨ x ⟩) ((p₁ ^ p₂) ^ ⟨ x ⟩) → P (s ^ ⟨ x ⟩) (p₁ ^ p₂ ^ ⟨ x ⟩)
     help p₁ p₂ s {x} p rewrite assoc-list p₁ p₂ ⟨ x ⟩ = p
 
+-- | depends on add which depends on list level properties only.
 add' : {A : Set}(xs ys zs : List A) → P xs ys → P (xs ^ zs) (ys ^ zs)
-add' .⟨⟩ .⟨⟩ ⟨⟩ (nil .⟨⟩ refl) = nil ⟨⟩ refl
-add' .(x ∷ s) ys ⟨⟩ (sbt x s .ys (p₁ , p₂ , p₃ , p₄)) = {!!}
-add' xs ys (x ∷ zs) prf = {!!}
+add' xs ys ⟨⟩ prf = add-⟨⟩-l {xs = xs} {ys ^ ⟨⟩} (add-⟨⟩-r {xs = xs} {ys} prf)
+add' xs ys (x ∷ zs) prf
+  = rev-assoc-l {xs = xs} {⟨ x ⟩} (rev-assoc-r {xs = ys} {⟨ x ⟩} {zs} (add' (xs ^ ⟨ x ⟩) (ys ^ ⟨ x ⟩) zs (add x {xs} {ys} prf)))
 
 del : {A : Set}(x : A)(xs ys : List A) → P (x ∷ xs) (x ∷ ys) → P xs ys
 del x xs ys (sbt .x .xs .(x ∷ ys) (⟨⟩ , .ys , p₃ , refl)) = p₃
