@@ -26,15 +26,21 @@ sym-law : {A : Set} {xs ys : List A} → P xs ys → P ys xs
 trans-law : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
 
 -- | independent (depends on ⟨⟩-cancel-r which is list level property)
-del-⟨⟩ : {A : Set}{xs ys : List A} → P xs (ys ^ ⟨⟩) → P xs ys
-del-⟨⟩ {ys = ⟨⟩} prf = prf
-del-⟨⟩ {ys = x ∷ ys} (sbt x₁ s .(x ∷ ys ^ ⟨⟩) (p₁ , p₂ , p₃ , p₄))
+del-⟨⟩-r : {A : Set}{xs ys : List A} → P xs (ys ^ ⟨⟩) → P xs ys
+del-⟨⟩-r {ys = ⟨⟩} prf = prf
+del-⟨⟩-r {ys = x ∷ ys} (sbt x₁ s .(x ∷ ys ^ ⟨⟩) (p₁ , p₂ , p₃ , p₄))
   = sbt x₁ s (x ∷ ys) (p₁ , p₂ , p₃ , trans (cong (x ∷_) (sym (⟨⟩-cancel-r ys))) p₄)
 
+-- | independent
+del-⟨⟩-l : {A : Set}{xs ys : List A} → P (xs ^ ⟨⟩) ys → P xs ys
+del-⟨⟩-l {xs = ⟨⟩} prf = prf
+del-⟨⟩-l {xs = x ∷ xs} (nil .(x ∷ xs ^ ⟨⟩) ())
+del-⟨⟩-l {xs = x ∷ xs} (sbt .x .(xs ^ ⟨⟩) t (p₁ , p₂ , p₃ , p₄)) = sbt x xs t (p₁ , p₂ , del-⟨⟩-l p₃ , p₄)
+
 -- | independent (depends on ⟨⟩-cancel-r which is list level property)
-add-⟨⟩ : {A : Set}{xs ys : List A} → P xs ys → P xs (ys ^ ⟨⟩)
-add-⟨⟩ {ys = ⟨⟩} prf = prf
-add-⟨⟩ {ys = x ∷ ys} (sbt x₁ s .(x ∷ ys) (p₁ , p₂ , p₃ , p₄))
+add-⟨⟩-r : {A : Set}{xs ys : List A} → P xs ys → P xs (ys ^ ⟨⟩)
+add-⟨⟩-r {ys = ⟨⟩} prf = prf
+add-⟨⟩-r {ys = x ∷ ys} (sbt x₁ s .(x ∷ ys) (p₁ , p₂ , p₃ , p₄))
   = sbt x₁ s (x ∷ ys ^ ⟨⟩) (p₁ , p₂ , p₃ , trans (cong (x ∷_) (⟨⟩-cancel-r ys)) p₄)
 
 -- | depends on just only refl-law
@@ -71,7 +77,8 @@ add x (sbt x₁ s .(p₁ ^ x₁ ∷ p₂) (p₁ , p₂ , p₃ , refl))
     help p₁ p₂ s {x} p rewrite assoc-list p₁ p₂ ⟨ x ⟩ = p
 
 add' : {A : Set}(xs ys zs : List A) → P xs ys → P (xs ^ zs) (ys ^ zs)
-add' xs ys zs prf  = {!!}
+add' xs ys ⟨⟩ prf = {!!}
+add' xs ys (x ∷ zs) prf = {!!}
 
 del : {A : Set}(x : A)(xs ys : List A) → P (x ∷ xs) (x ∷ ys) → P xs ys
 del x xs ys (sbt .x .xs .(x ∷ ys) (⟨⟩ , .ys , p₃ , refl)) = p₃
