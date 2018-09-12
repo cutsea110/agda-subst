@@ -100,9 +100,9 @@ ins x (nil .⟨⟩ refl) = sbt x ⟨⟩ (x ∷ ⟨⟩) (⟨⟩ , ⟨⟩ , nil �
 ins x (sbt x₁ s t x₂) = sbt x (x₁ ∷ s) (x ∷ t) (⟨⟩ , t , sbt x₁ s t x₂ , refl)
 
 -- | independent
-ins' : {A : Set}(xs ys zs : List A) → P xs ys → P (zs ^ xs) (zs ^ ys)
-ins' xs ys ⟨⟩ prf = prf
-ins' xs ys (x ∷ zs) prf = sbt x (zs ^ xs) (x ∷ zs ^ ys) (⟨⟩ , zs ^ ys , ins' xs ys zs prf , refl)
+ins' : {A : Set}{xs ys : List A}(zs : List A) → P xs ys → P (zs ^ xs) (zs ^ ys)
+ins' ⟨⟩ prf = prf
+ins' {xs = xs} {ys} (x ∷ zs) prf = sbt x (zs ^ xs) (x ∷ zs ^ ys) (⟨⟩ , zs ^ ys , ins' {xs = xs} {ys} zs prf , refl)
 
 -- | depends on list level properties only.
 add : {A : Set}(x : A){xs ys : List A} → P xs ys → P (xs ^ ⟨ x ⟩) (ys ^ ⟨ x ⟩)
@@ -114,22 +114,26 @@ add x (sbt x₁ s .(p₁ ^ x₁ ∷ p₂) (p₁ , p₂ , p₃ , refl))
     help p₁ p₂ s {x} p rewrite assoc-list p₁ p₂ ⟨ x ⟩ = p
 
 -- | depends on add which depends on list level properties only.
-add' : {A : Set}(xs ys zs : List A) → P xs ys → P (xs ^ zs) (ys ^ zs)
-add' xs ys ⟨⟩ prf = add-⟨⟩-l {xs = xs} {ys ^ ⟨⟩} (add-⟨⟩-r {xs = xs} {ys} prf)
-add' xs ys (x ∷ zs) prf
-  = rev-assoc-l {xs = xs} {⟨ x ⟩} (rev-assoc-r {xs = ys} {⟨ x ⟩} {zs} (add' (xs ^ ⟨ x ⟩) (ys ^ ⟨ x ⟩) zs (add x {xs} {ys} prf)))
+add' : {A : Set}{xs ys : List A}(zs : List A) → P xs ys → P (xs ^ zs) (ys ^ zs)
+add' {xs = xs} {ys} ⟨⟩ p = add-⟨⟩-l {xs = xs} {ys ^ ⟨⟩} (add-⟨⟩-r {xs = xs} {ys} p)
+add' {xs = xs} {ys} (x ∷ zs) p with add' {xs = xs ^ ⟨ x ⟩} {ys ^ ⟨ x ⟩} zs (add x {xs} {ys} p)
+... | q = rev-assoc-l {xs = xs} {⟨ x ⟩} (rev-assoc-r {xs = ys} {⟨ x ⟩} {zs} q)
+
+exch : {A : Set}(v w : A)(xs ys : List A) → P (v ∷ xs ^ ⟨ w ⟩ ^ ys) (w ∷ xs ^ ⟨ v ⟩ ^ ys)
+exch v w xs ys with (flip ⟨ v ⟩ ⟨ w ⟩)
+... | prf = {!!}
 
 del : {A : Set}(x : A)(xs ys : List A) → P (x ∷ xs) (x ∷ ys) → P xs ys
 del x xs ys (sbt .x .xs .(x ∷ ys) (⟨⟩ , .ys , p₃ , refl)) = p₃
 del x xs .(p₁ ^ x ∷ p₂) (sbt .x .xs .(x ∷ p₁ ^ x ∷ p₂) (.x ∷ p₁ , p₂ , p₃ , refl)) = trans-law p₃ (push-in x p₁ p₂)
-
+{--
 exch : {A : Set}(v w : A)(xs ys : List A) → P (v ∷ xs ^ ⟨ w ⟩ ^ ys) (w ∷ xs ^ ⟨ v ⟩ ^ ys)
 exch v w ⟨⟩ ⟨⟩ = sbt v (w ∷ ⟨⟩) (w ∷ v ∷ ⟨⟩) (w ∷ ⟨⟩ , ⟨⟩ , sbt w ⟨⟩ (w ∷ ⟨⟩) (⟨⟩ , ⟨⟩ , nil ⟨⟩ refl , refl) , refl)
 exch v w ⟨⟩ (x ∷ ys) = swap v w (x ∷ ys)
 exch v w (x ∷ xs) ys with ins x (exch v w xs ys)
 ... | prf with swap v x (xs ^ w ∷ ys) | swap x w (xs ^ v ∷ ys)
 ... | sw₁ | sw₂ = trans-law (trans-law sw₁ prf) sw₂
-
+--}
 sym-law {xs = ⟨⟩} {.⟨⟩} (nil .⟨⟩ refl) = nil ⟨⟩ refl
 sym-law {xs = x ∷ xs} {.⟨⟩} (nil .(x ∷ xs) ())
 sym-law {xs = x ∷ xs} {.(p₁ ^ x ∷ p₂)} (sbt .x .xs .(p₁ ^ x ∷ p₂) (p₁ , p₂ , p₃ , refl))
