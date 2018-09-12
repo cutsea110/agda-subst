@@ -50,6 +50,11 @@ add-⟨⟩-l {xs = x ∷ xs} (nil .(x ∷ xs) ())
 add-⟨⟩-l {xs = x ∷ xs} (sbt .x .xs t (p₁ , p₂ , p₃ , p₄)) = sbt x (xs ^ ⟨⟩) t (p₁ , p₂ , add-⟨⟩-l p₃ , p₄)
 
 -- | independent
+flip : {A : Set}(xs ys : List A) → P (xs ^ ys) (ys ^ xs)
+flip ⟨⟩ ys = add-⟨⟩-r refl-law
+flip (x ∷ xs) ys = sbt x (xs ^ ys) (ys ^ x ∷ xs) (ys , xs , flip xs ys , refl)
+
+-- | independent
 assoc-l : {A : Set}{xs ys zs ws : List A} → P (xs ^ (ys ^ zs)) ws → P ((xs ^ ys) ^ zs) ws
 assoc-l {xs = ⟨⟩} {ys} {zs} prf = prf
 assoc-l {xs = x ∷ xs} {ys} {zs} (nil .(x ∷ xs ^ ys ^ zs) ())
