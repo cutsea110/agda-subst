@@ -121,8 +121,19 @@ add' {xs = xs} {ys} ⟨⟩ p = add-⟨⟩-l {xs = xs} {ys ^ ⟨⟩} (add-⟨⟩-
 add' {xs = xs} {ys} (x ∷ zs) p with add' {xs = xs ^ ⟨ x ⟩} {ys ^ ⟨ x ⟩} zs (add x {xs} {ys} p)
 ... | q = rev-assoc-l {xs = xs} {⟨ x ⟩} (rev-assoc-r {xs = ys} {⟨ x ⟩} {zs} q)
 
-sym-law : {A : Set} {xs ys : List A} → P xs ys → P ys xs
 trans-law : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
+trans-law {xs = .⟨⟩} {⟨⟩} {zs} (nil .⟨⟩ refl) q = q
+trans-law {xs = .(x ∷ s)} {⟨⟩} {zs} (sbt x s .⟨⟩ (p₁ , p₂ , p₃ , p₄)) q = ⊥-elim (⟨⟩≢xs^w∷ys x p₁ p₂ p₄)
+trans-law {xs = xs} {x ∷ ys} {.⟨⟩} p (nil .(x ∷ ys) ())
+trans-law {xs = ⟨⟩} {x ∷ ys} {.(p₁ ^ x ∷ p₂)} () (sbt .x .ys .(p₁ ^ x ∷ p₂) (p₁ , p₂ , p₃ , refl))
+trans-law {xs = x₁ ∷ xs} {x ∷ ys} {.(p₁ ^ x ∷ p₂)} (sbt .x₁ .xs .(x ∷ ys) (q₁ , q₂ , q₃ , q₄)) (sbt .x .ys .(p₁ ^ x ∷ p₂) (p₁ , p₂ , p₃ , refl)) = {!!}
+
+sym-law : {A : Set} {xs ys : List A} → P xs ys → P ys xs
+sym-law {xs = ⟨⟩} {.⟨⟩} (nil .⟨⟩ refl) = nil ⟨⟩ refl
+sym-law {xs = x ∷ xs} {.⟨⟩} (nil .(x ∷ xs) ())
+sym-law {xs = x ∷ xs} {.(p₁ ^ x ∷ p₂)} (sbt .x .xs .(p₁ ^ x ∷ p₂) (p₁ , p₂ , p₃ , refl))
+  with pull-out x p₁ p₂ | ins x (sym-law p₃)
+... | q₁ | q₂ = trans-law q₁ q₂
 
 del : {A : Set}(x : A)(xs ys : List A) → P (x ∷ xs) (x ∷ ys) → P xs ys
 del x xs ys (sbt .x .xs .(x ∷ ys) (⟨⟩ , .ys , p₃ , refl)) = p₃
@@ -135,14 +146,3 @@ exch v w (x ∷ xs) ys with ins x (exch v w xs ys)
 ... | prf with swap v x (xs ^ w ∷ ys) | swap x w (xs ^ v ∷ ys)
 ... | sw₁ | sw₂ = trans-law (trans-law sw₁ prf) sw₂
 
-sym-law {xs = ⟨⟩} {.⟨⟩} (nil .⟨⟩ refl) = nil ⟨⟩ refl
-sym-law {xs = x ∷ xs} {.⟨⟩} (nil .(x ∷ xs) ())
-sym-law {xs = x ∷ xs} {.(p₁ ^ x ∷ p₂)} (sbt .x .xs .(p₁ ^ x ∷ p₂) (p₁ , p₂ , p₃ , refl))
-  with pull-out x p₁ p₂ | ins x (sym-law p₃)
-... | q₁ | q₂ = trans-law q₁ q₂
-
-trans-law {xs = .⟨⟩} {⟨⟩} {zs} (nil .⟨⟩ refl) q = q
-trans-law {xs = .(x ∷ s)} {⟨⟩} {zs} (sbt x s .⟨⟩ (p₁ , p₂ , p₃ , p₄)) q = ⊥-elim (⟨⟩≢xs^w∷ys x p₁ p₂ p₄)
-trans-law {xs = xs} {x ∷ ys} {.⟨⟩} p (nil .(x ∷ ys) ())
-trans-law {xs = ⟨⟩} {x ∷ ys} {.(p₁ ^ x ∷ p₂)} () (sbt .x .ys .(p₁ ^ x ∷ p₂) (p₁ , p₂ , p₃ , refl))
-trans-law {xs = x₁ ∷ xs} {x ∷ ys} {.(p₁ ^ x ∷ p₂)} (sbt .x₁ .xs .(x ∷ ys) (q₁ , q₂ , q₃ , q₄)) (sbt .x .ys .(p₁ ^ x ∷ p₂) (p₁ , p₂ , p₃ , refl)) = {!!}
