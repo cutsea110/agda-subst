@@ -9,6 +9,7 @@ data P {A : Set} : List A → List A → Set where
         → (∃ λ u → ∃ λ v → P s (u ^ v) ∧ t ≡ u ^ ⟨ x ⟩ ^ v)
         → P (⟨ x ⟩ ^ s) t
 
+-- | list properties
 ⟨⟩≢xs^w∷ys : {A : Set}(w : A)(xs ys : List A) → ⟨⟩ ≢ xs ^ w ∷ ys
 ⟨⟩≢xs^w∷ys w ⟨⟩ ys ()
 ⟨⟩≢xs^w∷ys w (x ∷ xs) ys ()
@@ -126,7 +127,10 @@ trans-law {xs = .⟨⟩} {⟨⟩} {zs} (nil .⟨⟩ refl) q = q
 trans-law {xs = .(x ∷ s)} {⟨⟩} {zs} (sbt x s .⟨⟩ (p₁ , p₂ , p₃ , p₄)) q = ⊥-elim (⟨⟩≢xs^w∷ys x p₁ p₂ p₄)
 trans-law {xs = xs} {x ∷ ys} {.⟨⟩} p (nil .(x ∷ ys) ())
 trans-law {xs = ⟨⟩} {x ∷ ys} {.(p₁ ^ x ∷ p₂)} () (sbt .x .ys .(p₁ ^ x ∷ p₂) (p₁ , p₂ , p₃ , refl))
-trans-law {xs = x₁ ∷ xs} {x ∷ ys} {.(p₁ ^ x ∷ p₂)} (sbt .x₁ .xs .(x ∷ ys) (q₁ , q₂ , q₃ , q₄)) (sbt .x .ys .(p₁ ^ x ∷ p₂) (p₁ , p₂ , p₃ , refl)) = {!!}
+trans-law {xs = .x ∷ xs} {x ∷ ys} {.(p₁ ^ x ∷ p₂)} (sbt .x .xs .(x ∷ ys) (⟨⟩ , .ys , q₃ , refl)) (sbt .x .ys .(p₁ ^ x ∷ p₂) (p₁ , p₂ , p₃ , refl))
+  = sbt x xs (p₁ ^ x ∷ p₂) (p₁ , p₂ , trans-law q₃ p₃ , refl)
+trans-law {xs = x₁ ∷ xs} {x ∷ .(q₁ ^ x₁ ∷ q₂)} {.(p₁ ^ x ∷ p₂)} (sbt .x₁ .xs .(x ∷ q₁ ^ x₁ ∷ q₂) (.x ∷ q₁ , q₂ , q₃ , refl)) (sbt .x .(q₁ ^ x₁ ∷ q₂) .(p₁ ^ x ∷ p₂) (p₁ , p₂ , p₃ , refl)) = {!!}
+
 
 sym-law : {A : Set} {xs ys : List A} → P xs ys → P ys xs
 sym-law {xs = ⟨⟩} {.⟨⟩} (nil .⟨⟩ refl) = nil ⟨⟩ refl
