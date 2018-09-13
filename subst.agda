@@ -1,12 +1,17 @@
 open import Data.List renaming ([] to ⟨⟩; [_] to ⟨_⟩; _++_ to _^_)
 open import Relation.Binary.PropositionalEquality as PropEq
 open import Data.Product using (∃; _,_) renaming (_×_ to _∧_)
+open import Data.Empty
 
 data P {A : Set} : List A → List A → Set where
   nil : (s : List A) → (prf : s ≡ ⟨⟩) → P s ⟨⟩
   sbt : (x : A) (s t : List A)
         → (∃ λ u → ∃ λ v → P s (u ^ v) ∧ t ≡ u ^ ⟨ x ⟩ ^ v)
         → P (⟨ x ⟩ ^ s) t
+
+⟨⟩≢xs^w∷ys : {A : Set}(w : A)(xs ys : List A) → ⟨⟩ ≢ xs ^ w ∷ ys
+⟨⟩≢xs^w∷ys w ⟨⟩ ys ()
+⟨⟩≢xs^w∷ys w (x ∷ xs) ys ()
 
 -- | list properties
 assoc-list : {A : Set}(x y z : List A) → (x ^ y) ^ z ≡ x ^ (y ^ z)
@@ -139,12 +144,6 @@ sym-law {xs = x ∷ xs} {.⟨⟩} (nil .(x ∷ xs) ())
 sym-law {xs = x ∷ xs} {.(p₁ ^ x ∷ p₂)} (sbt .x .xs .(p₁ ^ x ∷ p₂) (p₁ , p₂ , p₃ , refl))
   with pull-out x p₁ p₂ | ins x (sym-law p₃)
 ... | q₁ | q₂ = trans-law q₁ q₂
-
-open import Data.Empty
-
-⟨⟩≢xs^w∷ys : {A : Set}(w : A)(xs ys : List A) → ⟨⟩ ≢ xs ^ w ∷ ys
-⟨⟩≢xs^w∷ys w ⟨⟩ ys ()
-⟨⟩≢xs^w∷ys w (x ∷ xs) ys ()
 
 trans-law {xs = .⟨⟩} {⟨⟩} {zs} (nil .⟨⟩ refl) q = q
 trans-law {xs = .(x ∷ s)} {⟨⟩} {zs} (sbt x s .⟨⟩ (p₁ , p₂ , p₃ , p₄)) q = ⊥-elim (⟨⟩≢xs^w∷ys x p₁ p₂ p₄)
