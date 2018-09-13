@@ -131,7 +131,6 @@ trans-law {xs = .x ∷ xs} {x ∷ ys} {.(p₁ ^ x ∷ p₂)} (sbt .x .xs .(x ∷
   = sbt x xs (p₁ ^ x ∷ p₂) (p₁ , p₂ , trans-law q₃ p₃ , refl)
 trans-law {xs = x₁ ∷ xs} {x ∷ .(q₁ ^ x₁ ∷ q₂)} {.(p₁ ^ x ∷ p₂)} (sbt .x₁ .xs .(x ∷ q₁ ^ x₁ ∷ q₂) (.x ∷ q₁ , q₂ , q₃ , refl)) (sbt .x .(q₁ ^ x₁ ∷ q₂) .(p₁ ^ x ∷ p₂) (p₁ , p₂ , p₃ , refl)) = {!!}
 
-
 sym-law : {A : Set} {xs ys : List A} → P xs ys → P ys xs
 sym-law {xs = ⟨⟩} {.⟨⟩} (nil .⟨⟩ refl) = nil ⟨⟩ refl
 sym-law {xs = x ∷ xs} {.⟨⟩} (nil .(x ∷ xs) ())
