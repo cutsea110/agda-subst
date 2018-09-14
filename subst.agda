@@ -41,24 +41,27 @@ del-⟨⟩-l {xs = ⟨⟩} prf = prf
 del-⟨⟩-l {xs = x ∷ xs} (sbt .x .(xs ^ ⟨⟩) t (p₁ , p₂ , p₃ , p₄))
   = sbt x xs t (p₁ , p₂ , del-⟨⟩-l {xs = xs} {p₁ ^ p₂} p₃ , p₄)
 
-{--
-
 -- | independent (depends on ⟨⟩-cancel which is list level property)
 add-⟨⟩-r : {A : Set}{xs ys : List A} → P xs ys → P xs (ys ^ ⟨⟩)
 add-⟨⟩-r {ys = ⟨⟩} prf = prf
-add-⟨⟩-r {ys = x ∷ ys} (sbt x₁ s .(x ∷ ys) (p₁ , p₂ , p₃ , p₄))
-  = sbt x₁ s (x ∷ ys ^ ⟨⟩) (p₁ , p₂ , p₃ , trans (cong (x ∷_) (⟨⟩-cancel ys)) p₄)
+add-⟨⟩-r {ys = x ∷ ys} (nil .(x ∷ ys) ())
+add-⟨⟩-r {ys = x₁ ∷ ys} (sbt x s .(x₁ ∷ ys) (p₁ , p₂ , p₃ , p₄))
+  = sbt x s (x₁ ∷ ys ^ ⟨⟩) (p₁ , p₂ , p₃ , trans (⟨⟩-cancel (⟨ x₁ ⟩ ^ ys)) p₄)
 
 -- | independent
 add-⟨⟩-l : {A : Set}{xs ys : List A} → P xs ys → P (xs ^ ⟨⟩) ys
 add-⟨⟩-l {xs = ⟨⟩} prf = prf
-add-⟨⟩-l {xs = x ∷ xs} (nil .(x ∷ xs) ())
-add-⟨⟩-l {xs = x ∷ xs} (sbt .x .xs t (p₁ , p₂ , p₃ , p₄)) = sbt x (xs ^ ⟨⟩) t (p₁ , p₂ , add-⟨⟩-l p₃ , p₄)
+add-⟨⟩-l {xs = x ∷ xs} (sbt .x .xs t (p₁ , p₂ , p₃ , p₄))
+  = sbt x (xs ^ ⟨⟩) t (p₁ , p₂ , add-⟨⟩-l {xs = xs} {p₁ ^ p₂} p₃ , p₄)
 
 -- | independent
 flip : {A : Set}(xs ys : List A) → P (xs ^ ys) (ys ^ xs)
 flip ⟨⟩ ys = add-⟨⟩-r refl-law
 flip (x ∷ xs) ys = sbt x (xs ^ ys) (ys ^ x ∷ xs) (ys , xs , flip xs ys , refl)
+
+{--
+
+
 
 -- | independent
 assoc-l : {A : Set}{xs ys zs ws : List A} → P (xs ^ (ys ^ zs)) ws → P ((xs ^ ys) ^ zs) ws
