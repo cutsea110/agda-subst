@@ -10,7 +10,6 @@ data P {A : Set} : List A → List A → Set where
         → P (⟨ x ⟩ ^ s) t
 
 -- | list properties
-
 ⟨⟩≢xs^w∷ys : {A : Set}(w : A)(xs ys : List A) → ⟨⟩ ≢ xs ^ w ∷ ys
 ⟨⟩≢xs^w∷ys w ⟨⟩ ys ()
 ⟨⟩≢xs^w∷ys w (x ∷ xs) ys ()
@@ -78,18 +77,15 @@ assoc-r {xs = x ∷ xs} {ys} {zs} (nil .(x ∷ xs ^ ys ^ zs) ())
 assoc-r {xs = x₁ ∷ xs} {ys} {zs} (sbt x s .(x₁ ∷ xs ^ ys ^ zs) (p₁ , p₂ , p₃ , p₄))
   = sbt x s (x₁ ∷ (xs ^ ys) ^ zs) (p₁ , p₂ , p₃ , trans (cong (x₁ ∷_) (assoc-list xs ys zs)) p₄)
 
-
-{--
-
-
-
-
-
 -- | independent
 rev-assoc-r : {A : Set}{xs ys zs ws : List A} → P ws ((xs ^ ys) ^ zs) → P ws (xs ^ (ys ^ zs))
 rev-assoc-r {xs = ⟨⟩} {ys} {zs} prf = prf
-rev-assoc-r {xs = x ∷ xs} {ys} {zs} (sbt x₁ s .(x ∷ (xs ^ ys) ^ zs) (p₁ , p₂ , p₃ , p₄))
-  = sbt x₁ s (x ∷ xs ^ ys ^ zs) (p₁ , p₂ , p₃ , trans (sym (cong (x ∷_) (assoc-list xs ys zs))) p₄)
+rev-assoc-r {xs = x ∷ xs} {ys} {zs} (nil .(x ∷ (xs ^ ys) ^ zs) ())
+rev-assoc-r {xs = x₁ ∷ xs} {ys} {zs} (sbt x s .(x₁ ∷ (xs ^ ys) ^ zs) (p₁ , p₂ , p₃ , p₄))
+  = sbt x s (x₁ ∷ xs ^ ys ^ zs) (p₁ , p₂ , p₃ , trans (sym (cong (x₁ ∷_) (assoc-list xs ys zs))) p₄)
+
+{--
+
 
 -- | depends on just only refl-law
 push-in : {A : Set}(x : A)(xs ys : List A) → P (⟨ x ⟩ ^ xs ^ ys) (xs ^ ⟨ x ⟩ ^ ys)
@@ -135,7 +131,9 @@ trans-law {xs = .⟨⟩} {⟨⟩} {zs} (nil .⟨⟩ refl) q = q
 trans-law {xs = .(x ∷ s)} {⟨⟩} {zs} (sbt x s .⟨⟩ (p₁ , p₂ , p₃ , p₄)) q = ⊥-elim (⟨⟩≢xs^w∷ys x p₁ p₂ p₄)
 trans-law {xs = xs} {x ∷ ys} {.⟨⟩} p (nil .(x ∷ ys) ())
 trans-law {xs = ⟨⟩} {x ∷ ys} {.(p₁ ^ x ∷ p₂)} () (sbt .x .ys .(p₁ ^ x ∷ p₂) (p₁ , p₂ , p₃ , refl))
-trans-law {xs = x₁ ∷ xs} {x ∷ ys} {.(p₁ ^ x ∷ p₂)} (sbt .x₁ .xs .(x ∷ ys) (q₁ , q₂ , q₃ , q₄)) (sbt .x .ys .(p₁ ^ x ∷ p₂) (p₁ , p₂ , p₃ , refl)) = {!!}
+trans-law {xs = .x ∷ xs} {x ∷ ys} {.(p₁ ^ x ∷ p₂)} (sbt .x .xs .(x ∷ ys) (⟨⟩ , .ys , q₃ , refl)) (sbt .x .ys .(p₁ ^ x ∷ p₂) (p₁ , p₂ , p₃ , refl))
+  = sbt x xs (p₁ ^ x ∷ p₂) (p₁ , p₂ , trans-law q₃ p₃ , refl)
+trans-law {xs = x₁ ∷ xs} {x ∷ .(q₁ ^ x₁ ∷ q₂)} {.(p₁ ^ x ∷ p₂)} (sbt .x₁ .xs .(x ∷ q₁ ^ x₁ ∷ q₂) (.x ∷ q₁ , q₂ , q₃ , refl)) (sbt .x .(q₁ ^ x₁ ∷ q₂) .(p₁ ^ x ∷ p₂) (p₁ , p₂ , p₃ , refl)) = {!!}
 
 sym-law : {A : Set} {xs ys : List A} → P xs ys → P ys xs
 sym-law {xs = ⟨⟩} {.⟨⟩} (nil .⟨⟩ refl) = nil ⟨⟩ refl
