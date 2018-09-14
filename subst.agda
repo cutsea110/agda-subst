@@ -4,11 +4,16 @@ open import Data.Product using (∃; _,_) renaming (_×_ to _∧_)
 open import Data.Empty
 
 data P {A : Set} : List A → List A → Set where
-  nil : (s : List A) → (prf : s ≡ ⟨⟩) → P ⟨⟩ s
-  sbt : (x : A) (s t : List A)
-        → (∃ λ u → ∃ λ v → P s (u ⌢ v) ∧ t ≡ u ⌢ ⟨ x ⟩ ⌢ v)
-        → P (⟨ x ⟩ ⌢ s) t
+  ∅_ : {t : List A} → (prf : ⟨⟩ ≡ t) → P ⟨⟩ t
+  ⟨_⟩⌢_≌_-⟦_⟧ : (x : A) (s t : List A)
+         → (∃ λ u → ∃ λ v → P s (u ⌢ v) ∧ t ≡ u ⌢ ⟨ x ⟩ ⌢ v)
+         → P (⟨ x ⟩ ⌢ s) t
 
+reflexivity : {A : Set} (xs : List A) → P xs xs
+reflexivity ⟨⟩ = ∅ refl
+reflexivity (x ∷ xs) = ⟨ x ⟩⌢ xs ≌ ⟨ x ⟩ ⌢ xs -⟦ ⟨⟩ , xs , reflexivity xs , refl ⟧
+
+{--
 -- | list properties
 ⟨⟩≢xs⌢w∷ys : {A : Set}(w : A)(xs ys : List A) → ⟨⟩ ≢ xs ⌢ w ∷ ys
 ⟨⟩≢xs⌢w∷ys w ⟨⟩ ys ()
@@ -139,7 +144,6 @@ sym-law {xs = .(x ∷ x₁ ∷ s)} {.t} (sbt x .(x₁ ∷ s) t (p₁ , p₂ , sb
 trans-law : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
 trans-law {xs = xs} {ys} {zs} p q = {!!}
 
-{--
 trans-law {xs = .⟨⟩} {⟨⟩} {zs} (nil .⟨⟩ refl) q = q
 trans-law {xs = .(x ∷ s)} {⟨⟩} {zs} (sbt x s .⟨⟩ (p₁ , p₂ , p₃ , p₄)) q = ⊥-elim (⟨⟩≢xs⌢w∷ys x p₁ p₂ p₄)
 trans-law {xs = xs} {x ∷ ys} {.⟨⟩} p (nil .(x ∷ ys) ())
