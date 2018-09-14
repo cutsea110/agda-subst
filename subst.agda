@@ -26,6 +26,9 @@ assoc-list (x ∷ xs) ys zs = cong (x ∷_) (assoc-list xs ys zs)
 ⟨⟩-cancel ⟨⟩ = refl
 ⟨⟩-cancel (x ∷ xs) = cong (x ∷_) (⟨⟩-cancel xs)
 
+push-in-l : {A : Set}(w : A)(xs ys : List A){zs : List A} → P (xs ^ ⟨ w ⟩ ^ ys) zs → P (⟨ w ⟩ ^ xs ^ ys) zs
+push-in-l w xs ys prf = {!!}
+
 -- | independent
 refl-law : {A : Set} {xs : List A} → P xs xs
 refl-law {xs = ⟨⟩} = nil ⟨⟩ refl
