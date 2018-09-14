@@ -124,16 +124,11 @@ add' {xs = xs} {ys} (x ∷ zs) p with add' {xs = xs ^ ⟨ x ⟩} {ys ^ ⟨ x ⟩
 ... | q = rev-assoc-l {xs = xs} {⟨ x ⟩} (rev-assoc-r {xs = ys} {⟨ x ⟩} {zs} q)
 
 sym-law : {A : Set} {xs ys : List A} → P xs ys → P ys xs
-sym-law {xs = .⟨⟩} {.⟨⟩} (nil .⟨⟩ refl) = nil ⟨⟩ refl
-sym-law {xs = .(x ∷ s)} {.⟨⟩} (sbt x s ⟨⟩ (p₁ , p₂ , p₃ , p₄)) = ⊥-elim (⟨⟩≢xs^w∷ys x p₁ p₂ p₄)
-sym-law {xs = .(x ∷ s)} {.(x ∷ t)} (sbt x s (.x ∷ t) (⟨⟩ , .t , p₃ , refl)) = sbt x t (x ∷ s) (⟨⟩ , s , sym-law p₃ , refl)
-sym-law {xs = .(x ∷ s)} {.(x₁ ∷ p₁ ^ x ∷ p₂)} (sbt x s (x₁ ∷ .(p₁ ^ x ∷ p₂)) (.x₁ ∷ p₁ , p₂ , p₃ , refl)) = {!!}
-
+sym-law {xs = xs} {ys} p = {!!}
 
 trans-law : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
-trans-law {xs = ⟨⟩} {.⟨⟩} {zs} (nil .⟨⟩ refl) q = q
-trans-law {xs = x ∷ xs} {.(x ∷ p₂)} {zs} (sbt .x .xs .(x ∷ p₂) (⟨⟩ , p₂ , p₃ , refl)) q = {!!}
-trans-law {xs = x ∷ xs} {.(x₁ ∷ p₁ ^ x ∷ p₂)} {zs} (sbt .x .xs .(x₁ ∷ p₁ ^ x ∷ p₂) (x₁ ∷ p₁ , p₂ , p₃ , refl)) q = {!!}
+trans-law {xs = xs} {ys} {zs} p q = {!!}
+
 
 {--
 
