@@ -59,23 +59,23 @@ flip : {A : Set}(xs ys : List A) → P (xs ^ ys) (ys ^ xs)
 flip ⟨⟩ ys = add-⟨⟩-r refl-law
 flip (x ∷ xs) ys = sbt x (xs ^ ys) (ys ^ x ∷ xs) (ys , xs , flip xs ys , refl)
 
+assoc-l : {A : Set}{xs ys zs ws : List A} → P (xs ^ (ys ^ zs)) ws → P ((xs ^ ys) ^ zs) ws
+assoc-l {xs = ⟨⟩} {ys} {zs} prf = prf
+assoc-l {xs = x ∷ xs} {ys} {zs} (sbt .x .(xs ^ ys ^ zs) t (p₁ , p₂ , p₃ , p₄))
+  = sbt x ((xs ^ ys) ^ zs) t (p₁ , p₂ , assoc-l {xs = xs} p₃ , p₄)
+
+-- | independent
+rev-assoc-l : {A : Set}{xs ys zs ws : List A} → P ((xs ^ ys) ^ zs) ws → P (xs ^ (ys ^ zs)) ws
+rev-assoc-l {xs = ⟨⟩} {ys} {zs} prf = prf
+rev-assoc-l {xs = x ∷ xs} {ys} {zs} (sbt .x .((xs ^ ys) ^ zs) t (p₁ , p₂ , p₃ , p₄))
+  = sbt x (xs ^ ys ^ zs) t (p₁ , p₂ , rev-assoc-l {xs = xs} p₃ , p₄)
+
 {--
 
 
 
 -- | independent
-assoc-l : {A : Set}{xs ys zs ws : List A} → P (xs ^ (ys ^ zs)) ws → P ((xs ^ ys) ^ zs) ws
-assoc-l {xs = ⟨⟩} {ys} {zs} prf = prf
-assoc-l {xs = x ∷ xs} {ys} {zs} (nil .(x ∷ xs ^ ys ^ zs) ())
-assoc-l {xs = x ∷ xs} {ys} {zs} (sbt .x .(xs ^ ys ^ zs) t (p₁ , p₂ , p₃ , p₄))
-  = sbt x ((xs ^ ys) ^ zs) t (p₁ , p₂ , assoc-l {xs = xs}{ys}{zs} p₃ , p₄)
 
--- | independent
-rev-assoc-l : {A : Set}{xs ys zs ws : List A} → P ((xs ^ ys) ^ zs) ws → P (xs ^ (ys ^ zs)) ws
-rev-assoc-l {xs = ⟨⟩} {ys} {zs} prf = prf
-rev-assoc-l {xs = x ∷ xs} {ys} {zs} (nil .(x ∷ (xs ^ ys) ^ zs) ())
-rev-assoc-l {xs = x ∷ xs} {ys} {zs} (sbt .x .((xs ^ ys) ^ zs) t (p₁ , p₂ , p₃ , p₄))
-  = sbt x (xs ^ ys ^ zs) t (p₁ , p₂ , rev-assoc-l {xs = xs} {ys} {zs} p₃ , p₄)
 
 -- | independent (depends on assoc-list which is list level property)
 assoc-r : {A : Set}{xs ys zs ws : List A} → P ws (xs ^ (ys ^ zs)) → P ws ((xs ^ ys) ^ zs)
