@@ -4,16 +4,17 @@ open import Data.Product using (∃; _,_) renaming (_×_ to _∧_)
 open import Data.Empty
 
 data P {A : Set} : List A → List A → Set where
-  nil : (s : List A) → (prf : s ≡ ⟨⟩) → P s ⟨⟩
+  nil : (s : List A) → (prf : s ≡ ⟨⟩) → P ⟨⟩ s
   sbt : (x : A) (s t : List A)
         → (∃ λ u → ∃ λ v → P s (u ^ v) ∧ t ≡ u ^ ⟨ x ⟩ ^ v)
         → P (⟨ x ⟩ ^ s) t
+
+-- | list properties
 
 ⟨⟩≢xs^w∷ys : {A : Set}(w : A)(xs ys : List A) → ⟨⟩ ≢ xs ^ w ∷ ys
 ⟨⟩≢xs^w∷ys w ⟨⟩ ys ()
 ⟨⟩≢xs^w∷ys w (x ∷ xs) ys ()
 
--- | list properties
 assoc-list : {A : Set}(x y z : List A) → (x ^ y) ^ z ≡ x ^ (y ^ z)
 assoc-list ⟨⟩ ys zs = refl
 assoc-list (x ∷ xs) ys zs = cong (x ∷_) (assoc-list xs ys zs)
@@ -30,14 +31,17 @@ refl-law {xs = x ∷ xs} = sbt x xs (x ∷ xs) (⟨⟩ , xs , refl-law , refl)
 -- | independent (depends on ⟨⟩-cancel which is list level property)
 del-⟨⟩-r : {A : Set}{xs ys : List A} → P xs (ys ^ ⟨⟩) → P xs ys
 del-⟨⟩-r {ys = ⟨⟩} prf = prf
-del-⟨⟩-r {ys = x ∷ ys} (sbt x₁ s .(x ∷ ys ^ ⟨⟩) (p₁ , p₂ , p₃ , p₄))
-  = sbt x₁ s (x ∷ ys) (p₁ , p₂ , p₃ , trans (cong (x ∷_) (sym (⟨⟩-cancel ys))) p₄)
+del-⟨⟩-r {ys = x ∷ ys} (nil .(x ∷ ys ^ ⟨⟩) ())
+del-⟨⟩-r {ys = x₁ ∷ ys} (sbt x s .(x₁ ∷ ys ^ ⟨⟩) (p₁ , p₂ , p₃ , p₄))
+  = sbt x s (x₁ ∷ ys) (p₁ , p₂ , p₃ , trans (sym (⟨⟩-cancel (⟨ x₁ ⟩ ^ ys))) p₄)
 
 -- | independent
 del-⟨⟩-l : {A : Set}{xs ys : List A} → P (xs ^ ⟨⟩) ys → P xs ys
 del-⟨⟩-l {xs = ⟨⟩} prf = prf
-del-⟨⟩-l {xs = x ∷ xs} (nil .(x ∷ xs ^ ⟨⟩) ())
-del-⟨⟩-l {xs = x ∷ xs} (sbt .x .(xs ^ ⟨⟩) t (p₁ , p₂ , p₃ , p₄)) = sbt x xs t (p₁ , p₂ , del-⟨⟩-l p₃ , p₄)
+del-⟨⟩-l {xs = x ∷ xs} (sbt .x .(xs ^ ⟨⟩) t (p₁ , p₂ , p₃ , p₄))
+  = sbt x xs t (p₁ , p₂ , del-⟨⟩-l {xs = xs} {p₁ ^ p₂} p₃ , p₄)
+
+{--
 
 -- | independent (depends on ⟨⟩-cancel which is list level property)
 add-⟨⟩-r : {A : Set}{xs ys : List A} → P xs ys → P xs (ys ^ ⟨⟩)
@@ -146,3 +150,4 @@ exch v w (x ∷ xs) ys with ins x (exch v w xs ys)
 ... | prf with swap v x (xs ^ w ∷ ys) | swap x w (xs ^ v ∷ ys)
 ... | sw₁ | sw₂ = trans-law (trans-law sw₁ prf) sw₂
 
+--}
