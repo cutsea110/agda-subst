@@ -84,9 +84,6 @@ rev-assoc-r {xs = x ∷ xs} {ys} {zs} (nil .(x ∷ (xs ^ ys) ^ zs) ())
 rev-assoc-r {xs = x₁ ∷ xs} {ys} {zs} (sbt x s .(x₁ ∷ (xs ^ ys) ^ zs) (p₁ , p₂ , p₃ , p₄))
   = sbt x s (x₁ ∷ xs ^ ys ^ zs) (p₁ , p₂ , p₃ , trans (sym (cong (x₁ ∷_) (assoc-list xs ys zs))) p₄)
 
-{--
-
-
 -- | depends on just only refl-law
 push-in : {A : Set}(x : A)(xs ys : List A) → P (⟨ x ⟩ ^ xs ^ ys) (xs ^ ⟨ x ⟩ ^ ys)
 push-in x xs ys = sbt x (xs ^ ys) (xs ^ ⟨ x ⟩ ^ ys) (xs , ys , refl-law , refl)
@@ -126,6 +123,12 @@ add' {xs = xs} {ys} ⟨⟩ p = add-⟨⟩-l {xs = xs} {ys ^ ⟨⟩} (add-⟨⟩-
 add' {xs = xs} {ys} (x ∷ zs) p with add' {xs = xs ^ ⟨ x ⟩} {ys ^ ⟨ x ⟩} zs (add x {xs} {ys} p)
 ... | q = rev-assoc-l {xs = xs} {⟨ x ⟩} (rev-assoc-r {xs = ys} {⟨ x ⟩} {zs} q)
 
+sym-law : {A : Set} {xs ys : List A} → P xs ys → P ys xs
+sym-law {xs = xs}{ys} p = {!!}
+
+{--
+
+
 trans-law : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
 trans-law {xs = .⟨⟩} {⟨⟩} {zs} (nil .⟨⟩ refl) q = q
 trans-law {xs = .(x ∷ s)} {⟨⟩} {zs} (sbt x s .⟨⟩ (p₁ , p₂ , p₃ , p₄)) q = ⊥-elim (⟨⟩≢xs^w∷ys x p₁ p₂ p₄)
@@ -135,7 +138,6 @@ trans-law {xs = .x ∷ xs} {x ∷ ys} {.(p₁ ^ x ∷ p₂)} (sbt .x .xs .(x ∷
   = sbt x xs (p₁ ^ x ∷ p₂) (p₁ , p₂ , trans-law q₃ p₃ , refl)
 trans-law {xs = x₁ ∷ xs} {x ∷ .(q₁ ^ x₁ ∷ q₂)} {.(p₁ ^ x ∷ p₂)} (sbt .x₁ .xs .(x ∷ q₁ ^ x₁ ∷ q₂) (.x ∷ q₁ , q₂ , q₃ , refl)) (sbt .x .(q₁ ^ x₁ ∷ q₂) .(p₁ ^ x ∷ p₂) (p₁ , p₂ , p₃ , refl)) = {!!}
 
-sym-law : {A : Set} {xs ys : List A} → P xs ys → P ys xs
 sym-law {xs = ⟨⟩} {.⟨⟩} (nil .⟨⟩ refl) = nil ⟨⟩ refl
 sym-law {xs = x ∷ xs} {.⟨⟩} (nil .(x ∷ xs) ())
 sym-law {xs = x ∷ xs} {.(p₁ ^ x ∷ p₂)} (sbt .x .xs .(p₁ ^ x ∷ p₂) (p₁ , p₂ , p₃ , refl))
