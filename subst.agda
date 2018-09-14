@@ -14,6 +14,10 @@ data P {A : Set} : List A → List A → Set where
 ⟨⟩≢xs^w∷ys w ⟨⟩ ys ()
 ⟨⟩≢xs^w∷ys w (x ∷ xs) ys ()
 
+p^q≡⟨⟩⇒p≡⟨⟩∧q≡⟨⟩ : {A : Set}{p q : List A} → p ^ q ≡ ⟨⟩ → p ≡ ⟨⟩ ∧ q ≡ ⟨⟩
+p^q≡⟨⟩⇒p≡⟨⟩∧q≡⟨⟩ {p = ⟨⟩} {.⟨⟩} refl = refl , refl
+p^q≡⟨⟩⇒p≡⟨⟩∧q≡⟨⟩ {p = x ∷ p} {q} ()
+
 assoc-list : {A : Set}(x y z : List A) → (x ^ y) ^ z ≡ x ^ (y ^ z)
 assoc-list ⟨⟩ ys zs = refl
 assoc-list (x ∷ xs) ys zs = cong (x ∷_) (assoc-list xs ys zs)
@@ -124,15 +128,15 @@ add' {xs = xs} {ys} (x ∷ zs) p with add' {xs = xs ^ ⟨ x ⟩} {ys ^ ⟨ x ⟩
 ... | q = rev-assoc-l {xs = xs} {⟨ x ⟩} (rev-assoc-r {xs = ys} {⟨ x ⟩} {zs} q)
 
 sym-law : {A : Set} {xs ys : List A} → P xs ys → P ys xs
-sym-law {xs = xs} {ys} p = {!!}
+sym-law {xs = .⟨⟩} {.⟨⟩} (nil .⟨⟩ refl) = nil ⟨⟩ refl
+sym-law {xs = .(x ∷ ⟨⟩)} {.t} (sbt x .⟨⟩ t (p₁ , p₂ , nil .(p₁ ^ p₂) prf , p₄)) with p^q≡⟨⟩⇒p≡⟨⟩∧q≡⟨⟩ {p = p₁} {p₂} prf
+... | refl , refl rewrite p₄ = sbt x ⟨⟩ (⟨ x ⟩) (⟨⟩ , ⟨⟩ , nil ⟨⟩ refl , refl)
+sym-law {xs = .(x ∷ x₁ ∷ s)} {.t} (sbt x .(x₁ ∷ s) t (p₁ , p₂ , sbt x₁ s .(p₁ ^ p₂) (q₁ , q₂ , q₃ , q₄) , p₄)) = {!!}
 
 trans-law : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
 trans-law {xs = xs} {ys} {zs} p q = {!!}
 
-
 {--
-
-
 trans-law {xs = .⟨⟩} {⟨⟩} {zs} (nil .⟨⟩ refl) q = q
 trans-law {xs = .(x ∷ s)} {⟨⟩} {zs} (sbt x s .⟨⟩ (p₁ , p₂ , p₃ , p₄)) q = ⊥-elim (⟨⟩≢xs^w∷ys x p₁ p₂ p₄)
 trans-law {xs = xs} {x ∷ ys} {.⟨⟩} p (nil .(x ∷ ys) ())
