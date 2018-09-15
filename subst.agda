@@ -13,23 +13,24 @@ reflexivity : {A : Set} (xs : List A) → P xs xs
 reflexivity ⟨⟩ = ∅ refl
 reflexivity (x ∷ xs) = ⟨ x ⟩⌢ xs ≌ ⟨ x ⟩ ⌢ xs with-⟦ ⟨⟩ , xs , reflexivity xs , refl ⟧
 
--- | independent
-ins : {A : Set}(x : A){xs ys : List A} → P xs ys → P (⟨ x ⟩ ⌢ xs) (⟨ x ⟩ ⌢ ys)
-ins x {.⟨⟩} {.⟨⟩} (∅ refl) = ⟨ x ⟩⌢ ⟨⟩ ≌ x ∷ ⟨⟩ with-⟦ ⟨⟩ , ⟨⟩ , (∅ refl) , refl ⟧
-ins x {.(x₁ ∷ s)} {.t} ⟨ x₁ ⟩⌢ s ≌ t with-⟦ u , v , P , p ⟧
-  = ⟨ x ⟩⌢ x₁ ∷ s ≌ x ∷ t with-⟦ ⟨⟩ , t , ⟨ x₁ ⟩⌢ s ≌ t with-⟦ u , v , P , p ⟧ , refl ⟧
+ins : {A : Set}{xs ys : List A}(x : A) → P xs ys → P (⟨ x ⟩ ⌢ xs) (⟨ x ⟩ ⌢ ys)
+ins {xs = xs} {ys} x p = ⟨ x ⟩⌢ xs ≌ ⟨ x ⟩ ⌢ ys with-⟦ ⟨⟩ , ys , p , refl ⟧
 
 symmetricity : {A : Set} (xs ys : List A) → P xs ys → P ys xs
-symmetricity .⟨⟩ .⟨⟩ (∅ refl) = ∅ refl
-symmetricity .(x ∷ s) ys ⟨ x ⟩⌢ s ≌ .ys with-⟦ ⟨⟩ , vs , P , p ⟧ rewrite p
-  = ins x (symmetricity s vs P)
-symmetricity .(x ∷ s) ys ⟨ x ⟩⌢ s ≌ .ys with-⟦ u ∷ us , vs , P , p ⟧ = {!!}
+symmetricity xs ys p = {!!}
 
 {--
 -- | list properties
 ⟨⟩≢xs⌢w∷ys : {A : Set}(w : A)(xs ys : List A) → ⟨⟩ ≢ xs ⌢ w ∷ ys
 ⟨⟩≢xs⌢w∷ys w ⟨⟩ ys ()
 ⟨⟩≢xs⌢w∷ys w (x ∷ xs) ys ()
+
+-- | independent
+ins : {A : Set}(x : A){xs ys : List A} → P xs ys → P (⟨ x ⟩ ⌢ xs) (⟨ x ⟩ ⌢ ys)
+ins x {.⟨⟩} {.⟨⟩} (∅ refl) = ⟨ x ⟩⌢ ⟨⟩ ≌ x ∷ ⟨⟩ with-⟦ ⟨⟩ , ⟨⟩ , (∅ refl) , refl ⟧
+ins x {.(x₁ ∷ s)} {.t} ⟨ x₁ ⟩⌢ s ≌ t with-⟦ u , v , P , p ⟧
+  = ⟨ x ⟩⌢ x₁ ∷ s ≌ x ∷ t with-⟦ ⟨⟩ , t , ⟨ x₁ ⟩⌢ s ≌ t with-⟦ u , v , P , p ⟧ , refl ⟧
+
 
 p⌢q≡⟨⟩⇒p≡⟨⟩∧q≡⟨⟩ : {A : Set}{p q : List A} → p ⌢ q ≡ ⟨⟩ → p ≡ ⟨⟩ ∧ q ≡ ⟨⟩
 p⌢q≡⟨⟩⇒p≡⟨⟩∧q≡⟨⟩ {p = ⟨⟩} {.⟨⟩} refl = refl , refl
