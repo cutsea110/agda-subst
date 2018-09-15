@@ -5,13 +5,16 @@ open import Data.Empty
 
 data P {A : Set} : List A → List A → Set where
   ∅_ : {t : List A} → (prf : ⟨⟩ ≡ t) → P ⟨⟩ t
-  ⟨_⟩⌢_≌_-⟦_⟧ : (x : A) (s t : List A)
+  ⟨_⟩⌢_≌_with-⟦_⟧ : (x : A) (s t : List A)
          → (∃ λ u → ∃ λ v → P s (u ⌢ v) ∧ t ≡ u ⌢ ⟨ x ⟩ ⌢ v)
          → P (⟨ x ⟩ ⌢ s) t
 
 reflexivity : {A : Set} (xs : List A) → P xs xs
 reflexivity ⟨⟩ = ∅ refl
-reflexivity (x ∷ xs) = ⟨ x ⟩⌢ xs ≌ ⟨ x ⟩ ⌢ xs -⟦ ⟨⟩ , xs , reflexivity xs , refl ⟧
+reflexivity (x ∷ xs) = ⟨ x ⟩⌢ xs ≌ ⟨ x ⟩ ⌢ xs with-⟦ ⟨⟩ , xs , reflexivity xs , refl ⟧
+
+symmetricity : {A : Set} (xs ys : List A) → P xs ys → P ys xs
+symmetricity xs ys prf = {!!}
 
 {--
 -- | list properties
