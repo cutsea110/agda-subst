@@ -13,8 +13,17 @@ reflexivity : {A : Set} (xs : List A) → P xs xs
 reflexivity ⟨⟩ = ∅ refl
 reflexivity (x ∷ xs) = ⟨ x ⟩⌢ xs ≌ ⟨ x ⟩ ⌢ xs with-⟦ ⟨⟩ , xs , reflexivity xs , refl ⟧
 
+-- | independent
+ins : {A : Set}(x : A){xs ys : List A} → P xs ys → P (⟨ x ⟩ ⌢ xs) (⟨ x ⟩ ⌢ ys)
+ins x {.⟨⟩} {.⟨⟩} (∅ refl) = ⟨ x ⟩⌢ ⟨⟩ ≌ x ∷ ⟨⟩ with-⟦ ⟨⟩ , ⟨⟩ , (∅ refl) , refl ⟧
+ins x {.(x₁ ∷ s)} {.t} ⟨ x₁ ⟩⌢ s ≌ t with-⟦ u , v , P , p ⟧
+  = ⟨ x ⟩⌢ x₁ ∷ s ≌ x ∷ t with-⟦ ⟨⟩ , t , ⟨ x₁ ⟩⌢ s ≌ t with-⟦ u , v , P , p ⟧ , refl ⟧
+
 symmetricity : {A : Set} (xs ys : List A) → P xs ys → P ys xs
-symmetricity xs ys prf = {!!}
+symmetricity .⟨⟩ .⟨⟩ (∅ refl) = ∅ refl
+symmetricity .(x ∷ s) ys ⟨ x ⟩⌢ s ≌ .ys with-⟦ ⟨⟩ , vs , P , p ⟧ rewrite p
+  = ins x (symmetricity s vs P)
+symmetricity .(x ∷ s) ys ⟨ x ⟩⌢ s ≌ .ys with-⟦ u ∷ us , vs , P , p ⟧ = {!!}
 
 {--
 -- | list properties
@@ -113,10 +122,6 @@ pull-out x (x₁ ∷ xs) ys = sbt x₁ (xs ⌢ ⟨ x ⟩ ⌢ ys) (⟨ x ⟩ ⌢ 
 swap : {A : Set}(x y : A)(xs : List A) → P (⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ xs) (⟨ y ⟩ ⌢ ⟨ x ⟩ ⌢ xs)
 swap x y xs = push-in x (⟨ y ⟩) xs
 
--- | independent
-ins : {A : Set}(x : A){xs ys : List A} → P xs ys → P (⟨ x ⟩ ⌢ xs) (⟨ x ⟩ ⌢ ys)
-ins x (nil .⟨⟩ refl) = sbt x ⟨⟩ (x ∷ ⟨⟩) (⟨⟩ , ⟨⟩ , nil ⟨⟩ refl , refl)
-ins x (sbt x₁ s t x₂) = sbt x (x₁ ∷ s) (x ∷ t) (⟨⟩ , t , sbt x₁ s t x₂ , refl)
 
 -- | independent
 ins' : {A : Set}{xs ys : List A}(zs : List A) → P xs ys → P (zs ⌢ xs) (zs ⌢ ys)
