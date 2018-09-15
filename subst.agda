@@ -9,22 +9,38 @@ data P {A : Set} : List A → List A → Set where
          → (∃ λ u → ∃ λ v → P s (u ⌢ v) ∧ t ≡ u ⌢ ⟨ x ⟩ ⌢ v)
          → P (⟨ x ⟩ ⌢ s) t
 
+-- | list level utility
+⟨⟩≢xs⌢w∷ys : {A : Set}(w : A)(xs ys : List A) → ⟨⟩ ≢ xs ⌢ w ∷ ys
+⟨⟩≢xs⌢w∷ys w ⟨⟩ ys ()
+⟨⟩≢xs⌢w∷ys w (x ∷ xs) ys ()
+
+-- | list level utility
+⟨⟩-cancel : {A : Set}(xs : List A) → xs ⌢ ⟨⟩ ≡ xs
+⟨⟩-cancel ⟨⟩ = refl
+⟨⟩-cancel (x ∷ xs) = cong (x ∷_) (⟨⟩-cancel xs)
+
+-- | add ⟨⟩ for rhs on P
+add-⟨⟩-r : {A : Set}{xs ys : List A} → P xs ys → P xs (ys ⌢ ⟨⟩)
+add-⟨⟩-r {xs = .⟨⟩} {.⟨⟩} (∅ refl) = ∅ refl
+add-⟨⟩-r {xs = .(x ∷ s)} {.t} ⟨ x ⟩⌢ s ≌ t with-⟦ u , v , P , p ⟧
+  = ⟨ x ⟩⌢ s ≌ t ⌢ ⟨⟩ with-⟦ u , v , P , trans (cong (_⌢ ⟨⟩) p) (⟨⟩-cancel (u ⌢ ⟨ x ⟩ ⌢ v)) ⟧
+
+-- | add ⟨ x ⟩ for rhs on P
+add : {A : Set}{xs ys : List A}(x : A) → P xs ys → P (⟨ x ⟩ ⌢ xs) (ys ⌢ ⟨ x ⟩)
+add {xs = xs} {ys} x p = ⟨ x ⟩⌢ xs ≌ (ys ⌢ ⟨ x ⟩ ⌢ ⟨⟩) with-⟦ ys , ⟨⟩ , add-⟨⟩-r p , refl ⟧
+
+-- | ins ⟨ x ⟩ for rhs on P
+ins : {A : Set}{xs ys : List A}(x : A) → P xs ys → P (⟨ x ⟩ ⌢ xs) (⟨ x ⟩ ⌢ ys)
+ins {xs = xs} {ys} x p = ⟨ x ⟩⌢ xs ≌ ⟨ x ⟩ ⌢ ys with-⟦ ⟨⟩ , ys , p , refl ⟧
+
 reflexivity : {A : Set} (xs : List A) → P xs xs
 reflexivity ⟨⟩ = ∅ refl
 reflexivity (x ∷ xs) = ⟨ x ⟩⌢ xs ≌ ⟨ x ⟩ ⌢ xs with-⟦ ⟨⟩ , xs , reflexivity xs , refl ⟧
-
-ins : {A : Set}{xs ys : List A}(x : A) → P xs ys → P (⟨ x ⟩ ⌢ xs) (⟨ x ⟩ ⌢ ys)
-ins {xs = xs} {ys} x p = ⟨ x ⟩⌢ xs ≌ ⟨ x ⟩ ⌢ ys with-⟦ ⟨⟩ , ys , p , refl ⟧
 
 symmetricity : {A : Set} (xs ys : List A) → P xs ys → P ys xs
 symmetricity xs ys p = {!!}
 
 {--
--- | list properties
-⟨⟩≢xs⌢w∷ys : {A : Set}(w : A)(xs ys : List A) → ⟨⟩ ≢ xs ⌢ w ∷ ys
-⟨⟩≢xs⌢w∷ys w ⟨⟩ ys ()
-⟨⟩≢xs⌢w∷ys w (x ∷ xs) ys ()
-
 -- | independent
 ins : {A : Set}(x : A){xs ys : List A} → P xs ys → P (⟨ x ⟩ ⌢ xs) (⟨ x ⟩ ⌢ ys)
 ins x {.⟨⟩} {.⟨⟩} (∅ refl) = ⟨ x ⟩⌢ ⟨⟩ ≌ x ∷ ⟨⟩ with-⟦ ⟨⟩ , ⟨⟩ , (∅ refl) , refl ⟧
@@ -39,10 +55,6 @@ p⌢q≡⟨⟩⇒p≡⟨⟩∧q≡⟨⟩ {p = x ∷ p} {q} ()
 assoc-list : {A : Set}(x y z : List A) → (x ⌢ y) ⌢ z ≡ x ⌢ (y ⌢ z)
 assoc-list ⟨⟩ ys zs = refl
 assoc-list (x ∷ xs) ys zs = cong (x ∷_) (assoc-list xs ys zs)
-
-⟨⟩-cancel : {A : Set}(xs : List A) → xs ⌢ ⟨⟩ ≡ xs
-⟨⟩-cancel ⟨⟩ = refl
-⟨⟩-cancel (x ∷ xs) = cong (x ∷_) (⟨⟩-cancel xs)
 
 push-in-l : {A : Set}(w : A)(xs ys : List A){zs : List A} → P (xs ⌢ ⟨ w ⟩ ⌢ ys) zs → P (⟨ w ⟩ ⌢ xs ⌢ ys) zs
 push-in-l w xs ys prf = {!!}
