@@ -29,14 +29,23 @@ add-⟨⟩-r {xs = .(x ∷ s)} {.t} ⟨ x ⟩⌢ s ≌ t with-⟦ u , v , P , p 
 add : {A : Set}{xs ys : List A}(x : A) → P xs ys → P (⟨ x ⟩ ⌢ xs) (ys ⌢ ⟨ x ⟩)
 add {xs = xs} {ys} x p = ⟨ x ⟩⌢ xs ≌ (ys ⌢ ⟨ x ⟩ ⌢ ⟨⟩) with-⟦ ys , ⟨⟩ , add-⟨⟩-r p , refl ⟧
 
--- | ins ⟨ x ⟩ for rhs on P
-ins : {A : Set}{xs ys : List A}(x : A) → P xs ys → P (⟨ x ⟩ ⌢ xs) (⟨ x ⟩ ⌢ ys)
-ins {xs = xs} {ys} x p = ⟨ x ⟩⌢ xs ≌ ⟨ x ⟩ ⌢ ys with-⟦ ⟨⟩ , ys , p , refl ⟧
+-- | insert ⟨ x ⟩ for rhs on P
+insert : {A : Set}{xs ys : List A}(x : A) → P xs ys → P (⟨ x ⟩ ⌢ xs) (⟨ x ⟩ ⌢ ys)
+insert {xs = xs} {ys} x p = ⟨ x ⟩⌢ xs ≌ ⟨ x ⟩ ⌢ ys with-⟦ ⟨⟩ , ys , p , refl ⟧
 
+-- | interpose ⟨ x ⟩ for rhs on P
+interpose : {A : Set}{xs ys zs : List A}(x : A) → P xs (ys ⌢ zs) → P (⟨ x ⟩ ⌢ xs) (ys ⌢ ⟨ x ⟩ ⌢ zs)
+interpose {xs = .⟨⟩} {⟨⟩} {.⟨⟩} x (∅ refl) = ⟨ x ⟩⌢ ⟨⟩ ≌ ⟨ x ⟩ ⌢ ⟨⟩ with-⟦ ⟨⟩ , ⟨⟩ , (∅ refl) , refl ⟧
+interpose {xs = .⟨⟩} {x₁ ∷ ys} {zs} x (∅ ())
+interpose {xs = .(x₁ ∷ s)} {ys} {zs} x ⟨ x₁ ⟩⌢ s ≌ .(ys ⌢ zs) with-⟦ u , v , P , p ⟧
+  = ⟨ x ⟩⌢ x₁ ∷ s ≌ ys ⌢ x ∷ zs with-⟦ ys , zs , ⟨ x₁ ⟩⌢ s ≌ ys ⌢ zs with-⟦ u , v , P , p ⟧ , refl ⟧
+
+-- | Law I
 reflexivity : {A : Set} (xs : List A) → P xs xs
 reflexivity ⟨⟩ = ∅ refl
 reflexivity (x ∷ xs) = ⟨ x ⟩⌢ xs ≌ ⟨ x ⟩ ⌢ xs with-⟦ ⟨⟩ , xs , reflexivity xs , refl ⟧
 
+-- | Law II
 symmetricity : {A : Set} (xs ys : List A) → P xs ys → P ys xs
 symmetricity xs ys p = {!!}
 
