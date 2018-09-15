@@ -47,7 +47,10 @@ reflexivity (x ∷ xs) = ⟨ x ⟩⌢ xs ≌ ⟨ x ⟩ ⌢ xs with-⟦ ⟨⟩ , 
 
 -- | Law II
 symmetricity : {A : Set} (xs ys : List A) → P xs ys → P ys xs
-symmetricity xs ys p = {!!}
+symmetricity ⟨⟩ .⟨⟩ (∅ refl) = ∅ refl
+symmetricity (x ∷ xs) ys ⟨ .x ⟩⌢ .xs ≌ .ys with-⟦ ⟨⟩ , v , P , p ⟧ rewrite p with symmetricity xs v P
+... | q = ⟨ x ⟩⌢ v ≌ x ∷ xs with-⟦ ⟨⟩ , xs , q , refl ⟧
+symmetricity (x ∷ xs) ys ⟨ .x ⟩⌢ .xs ≌ .ys with-⟦ x₁ ∷ u , v , P , p ⟧ = {!!}
 
 {--
 -- | independent
