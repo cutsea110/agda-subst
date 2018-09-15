@@ -50,7 +50,8 @@ symmetricity : {A : Set} (xs ys : List A) → P xs ys → P ys xs
 symmetricity ⟨⟩ .⟨⟩ (∅ refl) = ∅ refl
 symmetricity (x ∷ xs) ys ⟨ .x ⟩⌢ .xs ≌ .ys with-⟦ ⟨⟩ , v , P , p ⟧ rewrite p with symmetricity xs v P
 ... | q = ⟨ x ⟩⌢ v ≌ x ∷ xs with-⟦ ⟨⟩ , xs , q , refl ⟧
-symmetricity (x ∷ xs) ys ⟨ .x ⟩⌢ .xs ≌ .ys with-⟦ x₁ ∷ u , v , P , p ⟧ = {!!}
+symmetricity (x ∷ xs) ys ⟨ .x ⟩⌢ .xs ≌ .ys with-⟦ x₁ ∷ u , v , P , p ⟧ rewrite p with symmetricity xs (⟨ x₁ ⟩ ⌢ u ⌢ v) P
+... | q = {!!}
 
 {--
 -- | independent
