@@ -2,6 +2,7 @@ open import Data.List renaming ([] to ⟨⟩; [_] to ⟨_⟩; _++_ to _⌢_)
 open import Relation.Binary.PropositionalEquality as PropEq
 open import Data.Product using (∃; _,_) renaming (_×_ to _∧_)
 open import Data.Empty
+open import Relation.Nullary
 
 data P {A : Set} : List A → List A → Set where
   ∅_ : {t : List A} → (prf : ⟨⟩ ≡ t) → P ⟨⟩ t
@@ -50,14 +51,17 @@ del-⟨⟩-lhs {xs = ⟨⟩} {ys} p = p
 del-⟨⟩-lhs {xs = x ∷ xs} {.t} ⟨ .x ⟩⌢ .(xs ⌢ ⟨⟩) ≌ t with-⟦ u , v , P , p ⟧
   = ⟨ x ⟩⌢ xs ≌ t with-⟦ u , v , del-⟨⟩-lhs {xs = xs} {u ⌢ v} P , p ⟧
 
+¬P[x∷xs]⟨⟩ : {A : Set}{x : A}{xs : List A} → ¬ (P (⟨ x ⟩ ⌢ xs) ⟨⟩)
+¬P[x∷xs]⟨⟩ {xs = .s} ⟨ x ⟩⌢ s ≌ .⟨⟩ with-⟦ u , v , P , p ⟧ = ⊥-elim (⟨⟩≢xs⌢w∷ys x u v p)
+
 -- | Law I
 reflexivity : {A : Set} (xs : List A) → P xs xs
 reflexivity ⟨⟩ = ∅ refl
 reflexivity (x ∷ xs) = ⟨ x ⟩⌢ xs ≌ ⟨⟩ ⌢ ⟨ x ⟩ ⌢ xs with-⟦ ⟨⟩ , xs , reflexivity xs , refl ⟧
 
 -- | Law II
-symmetricity : {A : Set} (xs ys : List A) → P xs ys → P ys xs
-symmetricity xs ys p = {!!}
+symmetricity : {A : Set} {xs ys : List A} → P xs ys → P ys xs
+symmetricity {xs = xs} {ys} p = {!!}
 
 transitivity : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
 transitivity {xs = xs} {ys} {zs} p q = {!!}
