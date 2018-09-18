@@ -176,4 +176,8 @@ symmetricity {xs = .(x ∷ s)} {.(u ⌢ x ∷ v)} ⟨ x ⟩⌢ s ≌ .(u ⌢ x �
 
 -- | Law III
 transitivity : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
-transitivity {xs = xs} {ys} {zs} p q = {!!}
+transitivity {xs = .⟨⟩} {.⟨⟩} {zs} (∅ refl) q = q
+transitivity {xs = .(x ∷ s)} {.(x ∷ v)} {.(u₂ ⌢ x ∷ v₂)} ⟨ x ⟩⌢ s ≌ .(x ∷ v) with-⟦ ⟨⟩ , v , P₁ , refl ⟧ ⟨ .x ⟩⌢ .v ≌ .(u₂ ⌢ x ∷ v₂) with-⟦ u₂ , v₂ , P₂ , refl ⟧
+  = ⟨ x ⟩⌢ s ≌ u₂ ⌢ x ∷ v₂ with-⟦ u₂ , v₂ , transitivity P₁ P₂ , refl ⟧
+transitivity {xs = .(x ∷ s)} {.(x₁ ∷ u ⌢ x ∷ v)} {.(u₂ ⌢ x₁ ∷ v₂)} ⟨ x ⟩⌢ s ≌ .(x₁ ∷ u ⌢ x ∷ v) with-⟦ x₁ ∷ u , v , P₁ , refl ⟧ ⟨ .x₁ ⟩⌢ .(u ⌢ x ∷ v) ≌ .(u₂ ⌢ x₁ ∷ v₂) with-⟦ u₂ , v₂ , P₂ , refl ⟧ = {!!}
+
