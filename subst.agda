@@ -104,6 +104,24 @@ xyzw≌xwyz x y z w = ⟨ x ⟩⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ w ⟩ ≌ ⟨
 xyzw≌xwzy : {A : Set}(x y z w : A) → P (⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ w ⟩) (⟨ x ⟩ ⌢ ⟨ w ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ y ⟩)
 xyzw≌xwzy x y z w = ⟨ x ⟩⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ w ⟩ ≌ ⟨ x ⟩ ⌢ ⟨ w ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ y ⟩ with-⟦ ⟨⟩ , ⟨ w ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ y ⟩ , xyz≌zyx y z w , refl ⟧
 
+xyzw≌yxzw : {A : Set}(x y z w : A) → P (⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ w ⟩) (⟨ y ⟩ ⌢ ⟨ x ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ w ⟩)
+xyzw≌yxzw x y z w = {!!}
+
+xyzw≌yxwz : {A : Set}(x y z w : A) → P (⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ w ⟩) (⟨ y ⟩ ⌢ ⟨ x ⟩ ⌢ ⟨ w ⟩ ⌢ ⟨ z ⟩)
+xyzw≌yxwz x y z w = {!!}
+
+xyzw≌yzxw : {A : Set}(x y z w : A) → P (⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ w ⟩) (⟨ y ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ x ⟩ ⌢ ⟨ w ⟩)
+xyzw≌yzxw x y z w = {!!}
+
+xyzw≌yzwx : {A : Set}(x y z w : A) → P (⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ w ⟩) (⟨ y ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ w ⟩ ⌢ ⟨ x ⟩)
+xyzw≌yzwx x y z w = {!!}
+
+xyzw≌ywxz : {A : Set}(x y z w : A) → P (⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ w ⟩) (⟨ y ⟩ ⌢ ⟨ w ⟩ ⌢ ⟨ x ⟩ ⌢ ⟨ z ⟩)
+xyzw≌ywxz x y z w = {!!}
+
+xyzw≌ywzx : {A : Set}(x y z w : A) → P (⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ w ⟩) (⟨ y ⟩ ⌢ ⟨ w ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ x ⟩)
+xyzw≌ywzx x y z w = {!!}
+
 -- | Law I
 reflexivity : {A : Set} (xs : List A) → P xs xs
 reflexivity ⟨⟩ = ∅ refl
