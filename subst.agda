@@ -69,11 +69,21 @@ reflexivity : {A : Set} (xs : List A) → P xs xs
 reflexivity ⟨⟩ = ∅ refl
 reflexivity (x ∷ xs) = ⟨ x ⟩⌢ xs ≌ ⟨⟩ ⌢ ⟨ x ⟩ ⌢ xs with-⟦ ⟨⟩ , xs , reflexivity xs , refl ⟧
 
+-- | symmetric train?
 xy≌yx : {A : Set}(x y : A) → P (⟨ x ⟩ ⌢ ⟨ y ⟩) (⟨ y ⟩ ⌢ ⟨ x ⟩)
 xy≌yx x y = ⟨ x ⟩⌢ ⟨ y ⟩ ≌ ⟨ y ⟩ ⌢ ⟨ x ⟩ with-⟦ ⟨ y ⟩ , ⟨⟩ , x≌x y , refl ⟧
 
+xyz≌xzy : {A : Set}(x y z : A) → P (⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩) (⟨ x ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ y ⟩)
+xyz≌xzy x y z = ⟨ x ⟩⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩ ≌ ⟨ x ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ y ⟩ with-⟦ ⟨⟩ ,  ⟨ z ⟩ ⌢ ⟨ y ⟩ , xy≌yx y z , refl ⟧
+
 xyz≌yxz : {A : Set}(x y z : A) → P (⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩) (⟨ y ⟩ ⌢ ⟨ x ⟩ ⌢ ⟨ z ⟩)
 xyz≌yxz x y z  = ⟨ x ⟩⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩ ≌ ⟨ y ⟩ ⌢ ⟨ x ⟩ ⌢ ⟨ z ⟩ with-⟦ ⟨ y ⟩ , ⟨ z ⟩ , xy≌xy y z , refl ⟧
+
+xyz≌yzx : {A : Set}(x y z : A) → P (⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩) (⟨ y ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ x ⟩)
+xyz≌yzx x y z = ⟨ x ⟩⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩ ≌ ⟨ y ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ x ⟩ with-⟦ ⟨ y ⟩ ⌢ ⟨ z ⟩ , ⟨⟩ , xy≌xy y z , refl ⟧
+
+xyz≌zxy : {A : Set}(x y z : A) → P (⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩) (⟨ z ⟩ ⌢ ⟨ x ⟩ ⌢ ⟨ y ⟩)
+xyz≌zxy x y z = ⟨ x ⟩⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩ ≌ ⟨ z ⟩ ⌢ ⟨ x ⟩ ⌢ ⟨ y ⟩ with-⟦ ⟨ z ⟩ , ⟨ y ⟩ , xy≌yx y z , refl ⟧
 
 xyz≌zyx : {A : Set}(x y z : A) → P (⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩) (⟨ z ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ x ⟩)
 xyz≌zyx x y z = ⟨ x ⟩⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩ ≌ ⟨ z ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ x ⟩ with-⟦ ⟨ z ⟩ ⌢ ⟨ y ⟩ , ⟨⟩ , xy≌yx y z , refl ⟧
