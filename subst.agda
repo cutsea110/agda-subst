@@ -54,7 +54,7 @@ del-⟨⟩-lhs {xs = x ∷ xs} {.t} ⟨ .x ⟩⌢ .(xs ⌢ ⟨⟩) ≌ t with-�
 ¬P[x∷xs]⟨⟩ : {A : Set}{x : A}{xs : List A} → ¬ (P (⟨ x ⟩ ⌢ xs) ⟨⟩)
 ¬P[x∷xs]⟨⟩ {xs = .s} ⟨ x ⟩⌢ s ≌ .⟨⟩ with-⟦ u , v , P , p ⟧ = ⊥-elim (⟨⟩≢xs⌢w∷ys x u v p)
 
--- 
+-- | inverse constructor for Definition of P's
 inverse : {A : Set}(x : A) (u v s : List A) → P (u ⌢ v) s → P (u ⌢ ⟨ x ⟩ ⌢ v) (⟨ x ⟩ ⌢ s)
 inverse x ⟨⟩ v s p = insert x p
 inverse x (x₁ ∷ u) v .(u₂ ⌢ x₁ ∷ v₂) ⟨ .x₁ ⟩⌢ .(u ⌢ v) ≌ .(u₂ ⌢ x₁ ∷ v₂) with-⟦ u₂ , v₂ , P₂ , refl ⟧
