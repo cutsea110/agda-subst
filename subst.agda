@@ -54,24 +54,21 @@ del-⟨⟩-lhs {xs = x ∷ xs} {.t} ⟨ .x ⟩⌢ .(xs ⌢ ⟨⟩) ≌ t with-�
 ¬P[x∷xs]⟨⟩ : {A : Set}{x : A}{xs : List A} → ¬ (P (⟨ x ⟩ ⌢ xs) ⟨⟩)
 ¬P[x∷xs]⟨⟩ {xs = .s} ⟨ x ⟩⌢ s ≌ .⟨⟩ with-⟦ u , v , P , p ⟧ = ⊥-elim (⟨⟩≢xs⌢w∷ys x u v p)
 
--- | reflexive train
+-- | 1
 x≌x : {A : Set}(x : A) → P (⟨ x ⟩ ⌢ ⟨⟩) (⟨⟩ ⌢ ⟨ x ⟩)
 x≌x x = ⟨ x ⟩⌢ ⟨⟩ ≌ ⟨ x ⟩ with-⟦ ⟨⟩ , ⟨⟩ , (∅ refl) , refl ⟧
 
+
+-- | 2
 xy≌xy : {A : Set}(x y : A) → P (⟨ x ⟩ ⌢ ⟨ y ⟩) (⟨ x ⟩ ⌢ ⟨ y ⟩)
 xy≌xy x y = ⟨ x ⟩⌢ ⟨ y ⟩ ≌ ⟨ x ⟩ ⌢  ⟨ y ⟩ with-⟦ ⟨⟩ , ⟨ y ⟩ , x≌x y , refl ⟧
 
-xyz≌xyz : {A : Set}(x y z : A) → P (⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩)  (⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩)
-xyz≌xyz x y z = ⟨ x ⟩⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩ ≌ ⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩ with-⟦ ⟨⟩ , ⟨ y ⟩ ⌢ ⟨ z ⟩ , xy≌xy y z , refl ⟧
-
--- | Law I
-reflexivity : {A : Set} (xs : List A) → P xs xs
-reflexivity ⟨⟩ = ∅ refl
-reflexivity (x ∷ xs) = ⟨ x ⟩⌢ xs ≌ ⟨⟩ ⌢ ⟨ x ⟩ ⌢ xs with-⟦ ⟨⟩ , xs , reflexivity xs , refl ⟧
-
--- | symmetric train?
 xy≌yx : {A : Set}(x y : A) → P (⟨ x ⟩ ⌢ ⟨ y ⟩) (⟨ y ⟩ ⌢ ⟨ x ⟩)
 xy≌yx x y = ⟨ x ⟩⌢ ⟨ y ⟩ ≌ ⟨ y ⟩ ⌢ ⟨ x ⟩ with-⟦ ⟨ y ⟩ , ⟨⟩ , x≌x y , refl ⟧
+
+-- | 3
+xyz≌xyz : {A : Set}(x y z : A) → P (⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩)  (⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩)
+xyz≌xyz x y z = ⟨ x ⟩⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩ ≌ ⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩ with-⟦ ⟨⟩ , ⟨ y ⟩ ⌢ ⟨ z ⟩ , xy≌xy y z , refl ⟧
 
 xyz≌xzy : {A : Set}(x y z : A) → P (⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩) (⟨ x ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ y ⟩)
 xyz≌xzy x y z = ⟨ x ⟩⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩ ≌ ⟨ x ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ y ⟩ with-⟦ ⟨⟩ ,  ⟨ z ⟩ ⌢ ⟨ y ⟩ , xy≌yx y z , refl ⟧
@@ -89,6 +86,12 @@ xyz≌zyx : {A : Set}(x y z : A) → P (⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩) (
 xyz≌zyx x y z = ⟨ x ⟩⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩ ≌ ⟨ z ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ x ⟩ with-⟦ ⟨ z ⟩ ⌢ ⟨ y ⟩ , ⟨⟩ , xy≌yx y z , refl ⟧
 
 -- | Law II
+-- | Law I
+reflexivity : {A : Set} (xs : List A) → P xs xs
+reflexivity ⟨⟩ = ∅ refl
+reflexivity (x ∷ xs) = ⟨ x ⟩⌢ xs ≌ ⟨⟩ ⌢ ⟨ x ⟩ ⌢ xs with-⟦ ⟨⟩ , xs , reflexivity xs , refl ⟧
+
+-- | symmetric train?
 symmetricity : {A : Set} {xs ys : List A} → P xs ys → P ys xs
 symmetricity {xs = xs} {ys} p = {!!}
 
