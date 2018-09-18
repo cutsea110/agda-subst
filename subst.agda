@@ -104,16 +104,16 @@ xyzw≌xwyz x y z w = ⟨ x ⟩⌢ y ∷ z ∷ w ∷ ⟨⟩ ≌ x ∷ w ∷ y �
 xyzw≌xwzy : {A : Set}(x y z w : A) → P (⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ w ⟩) (⟨ x ⟩ ⌢ ⟨ w ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ y ⟩)
 xyzw≌xwzy x y z w = ⟨ x ⟩⌢ y ∷ z ∷ w ∷ ⟨⟩ ≌ x ∷ w ∷ z ∷ y ∷ ⟨⟩ with-⟦ ⟨⟩ , ⟨ w ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ y ⟩ , xyz≌zyx y z w , refl ⟧
 
--- | Law II
 -- | Law I
 reflexivity : {A : Set} (xs : List A) → P xs xs
 reflexivity ⟨⟩ = ∅ refl
 reflexivity (x ∷ xs) = ⟨ x ⟩⌢ xs ≌ ⟨⟩ ⌢ ⟨ x ⟩ ⌢ xs with-⟦ ⟨⟩ , xs , reflexivity xs , refl ⟧
 
--- | symmetric train?
+-- | Law II
 symmetricity : {A : Set} {xs ys : List A} → P xs ys → P ys xs
 symmetricity {xs = xs} {ys} p = {!!}
 
+-- | Law III
 transitivity : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
 transitivity {xs = xs} {ys} {zs} p q = {!!}
 
