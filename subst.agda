@@ -171,7 +171,8 @@ reflexivity (x ∷ xs) = ⟨ x ⟩⌢ xs ≌ ⟨⟩ ⌢ ⟨ x ⟩ ⌢ xs with-�
 
 -- | Law II
 symmetricity : {A : Set} {xs ys : List A} → P xs ys → P ys xs
-symmetricity {xs = xs} {ys} p = {!!}
+symmetricity {xs = .⟨⟩} {.⟨⟩} (∅ refl) = ∅ refl
+symmetricity {xs = .(x ∷ s)} {.(u ⌢ x ∷ v)} ⟨ x ⟩⌢ s ≌ .(u ⌢ x ∷ v) with-⟦ u , v , P₁ , refl ⟧ = inverse x u v s (symmetricity P₁)
 
 -- | Law III
 transitivity : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
