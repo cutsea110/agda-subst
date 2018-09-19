@@ -174,6 +174,12 @@ symmetricity : {A : Set} {xs ys : List A} → P xs ys → P ys xs
 symmetricity {xs = .⟨⟩} {.⟨⟩} (∅ refl) = ∅ refl
 symmetricity {xs = .(x ∷ s)} {.(u ⌢ x ∷ v)} ⟨ x ⟩⌢ s ≌ .(u ⌢ x ∷ v) with-⟦ u , v , P₁ , refl ⟧ = inverse x u v s (symmetricity P₁)
 
+push-in : {A : Set}(x : A)(xs ys : List A) → P (⟨ x ⟩ ⌢ xs ⌢ ys) (xs ⌢ ⟨ x ⟩ ⌢ ys)
+push-in x xs ys = ⟨ x ⟩⌢ xs ⌢ ys ≌ xs ⌢ ⟨ x ⟩ ⌢ ys with-⟦ xs , ys , reflexivity (xs ⌢ ys) , refl ⟧
+
+pull-out : {A : Set}(x : A)(xs ys : List A) → P (xs ⌢ ⟨ x ⟩ ⌢ ys) (⟨ x ⟩ ⌢ xs ⌢ ys)
+pull-out x xs ys = inverse x xs ys (xs ⌢ ys) (reflexivity (xs ⌢ ys))
+
 -- | Law III
 transitivity : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
 transitivity {xs = .⟨⟩} {.⟨⟩} {zs} (∅ refl) q = q
