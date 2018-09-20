@@ -60,9 +60,8 @@ inverse x ⟨⟩ v s p = ⟨ x ⟩⌢ v ≌ x ∷ s with-⟦ ⟨⟩ , s , p , re
 inverse x (x₁ ∷ u) v .(u₂ ⌢ x₁ ∷ v₂) ⟨ .x₁ ⟩⌢ .(u ⌢ v) ≌ .(u₂ ⌢ x₁ ∷ v₂) with-⟦ u₂ , v₂ , P₂ , refl ⟧
   = ⟨ x₁ ⟩⌢ u ⌢ x ∷ v ≌ x ∷ u₂ ⌢ x₁ ∷ v₂ with-⟦ x ∷ u₂ , v₂ , inverse x u v (u₂ ⌢ v₂) P₂ , refl ⟧
 
-transposition : {A : Set}(i j : A)(xs ys zs : List A){ws : List A} →
-  P (xs ⌢ ⟨ i ⟩ ⌢ ys ⌢ ⟨ j ⟩ ⌢ zs) ws → P (xs ⌢ ⟨ j ⟩ ⌢ ys ⌢ ⟨ i ⟩ ⌢ zs) ws
-transposition i j xs ys zs prf = {!!}
+transposition : {A : Set}(i j : A)(xs ys zs : List A) → P (xs ⌢ ⟨ i ⟩ ⌢ ys ⌢ ⟨ j ⟩ ⌢ zs) (xs ⌢ ⟨ j ⟩ ⌢ ys ⌢ ⟨ i ⟩ ⌢ zs)
+transposition i j xs ys zs = {!!}
 
 -- | 1
 x≌x : {A : Set}(x : A) → P (⟨ x ⟩ ⌢ ⟨⟩) (⟨⟩ ⌢ ⟨ x ⟩)
