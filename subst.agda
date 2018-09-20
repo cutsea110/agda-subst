@@ -174,22 +174,22 @@ symmetricity : {A : Set} {xs ys : List A} → P xs ys → P ys xs
 symmetricity {xs = .⟨⟩} {.⟨⟩} (∅ refl) = ∅ refl
 symmetricity {xs = .(x ∷ s)} {.(u ⌢ x ∷ v)} ⟨ x ⟩⌢ s ≌ .(u ⌢ x ∷ v) with-⟦ u , v , P₁ , refl ⟧ = inverse x u v s (symmetricity P₁)
 
+{--
 push-in : {A : Set}(x : A)(xs ys : List A) → P (⟨ x ⟩ ⌢ xs ⌢ ys) (xs ⌢ ⟨ x ⟩ ⌢ ys)
 push-in x xs ys = ⟨ x ⟩⌢ xs ⌢ ys ≌ xs ⌢ ⟨ x ⟩ ⌢ ys with-⟦ xs , ys , reflexivity (xs ⌢ ys) , refl ⟧
 
 pull-out : {A : Set}(x : A)(xs ys : List A) → P (xs ⌢ ⟨ x ⟩ ⌢ ys) (⟨ x ⟩ ⌢ xs ⌢ ys)
 pull-out x xs ys = inverse x xs ys (xs ⌢ ys) (reflexivity (xs ⌢ ys))
+--}
 
-lemma : {A : Set}(x : A)(xs ys us vs : List A) → P (xs ⌢ ys) (us ⌢ vs) → P (xs ⌢ ⟨ x ⟩ ⌢ ys) (us ⌢ ⟨ x ⟩ ⌢ vs)
-lemma x ⟨⟩ ys ⟨⟩ vs p = ⟨ x ⟩⌢ ys ≌ x ∷ vs with-⟦ ⟨⟩ , vs , p , refl ⟧
-lemma x ⟨⟩ ys (x₁ ∷ us) vs p = ⟨ x ⟩⌢ ys ≌ x₁ ∷ us ⌢ x ∷ vs with-⟦ x₁ ∷ us , vs , p , refl ⟧
-lemma x (x₁ ∷ xs) ys us vs p = {!!}
+push-in : {A : Set}(x : A)(xs ys us vs : List A) → P (xs ⌢ ys) (us ⌢ vs) → P (xs ⌢ ⟨ x ⟩ ⌢ ys) (us ⌢ ⟨ x ⟩ ⌢ vs)
+push-in x xs ys us vs prf = {!!}
+
 
 -- | Law III
 transitivity : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
-transitivity {xs = .⟨⟩} {.⟨⟩} {zs} (∅ refl) q = q
-transitivity {xs = .(x ∷ s)} {.(x ∷ v₁)} {.(u₂ ⌢ x ∷ v₂)} ⟨ x ⟩⌢ s ≌ .(x ∷ v₁) with-⟦ ⟨⟩ , v₁ , P₁ , refl ⟧ ⟨ .x ⟩⌢ .v₁ ≌ .(u₂ ⌢ x ∷ v₂) with-⟦ u₂ , v₂ , P₂ , refl ⟧ = ⟨ x ⟩⌢ s ≌ u₂ ⌢ x ∷ v₂ with-⟦ u₂ , v₂ , transitivity P₁ P₂ , refl ⟧
-transitivity {xs = .(x ∷ s)} {.(x₁ ∷ u₁ ⌢ x ∷ v₁)} {.(u₂ ⌢ x₁ ∷ v₂)} ⟨ x ⟩⌢ s ≌ .(x₁ ∷ u₁ ⌢ x ∷ v₁) with-⟦ x₁ ∷ u₁ , v₁ , P₁ , refl ⟧ ⟨ .x₁ ⟩⌢ .(u₁ ⌢ x ∷ v₁) ≌ .(u₂ ⌢ x₁ ∷ v₂) with-⟦ u₂ , v₂ , P₂ , refl ⟧ with symmetricity P₁
-transitivity {_} {.(x₂ ∷ ⟨⟩ ⌢ u₃ ⌢ x₁ ∷ v₃)} {.(x₁ ∷ u₁ ⌢ ⟨ x₂ ⟩ ⌢ v₁)} {.(u₂ ⌢ ⟨ x₁ ⟩ ⌢ v₂)} ⟨ x₂ ⟩⌢ .(u₃ ⌢ x₁ ∷ v₃) ≌ .(x₁ ∷ u₁ ⌢ ⟨ x₂ ⟩ ⌢ v₁) with-⟦ x₁ ∷ u₁ , v₁ , P₁ , refl ⟧ ⟨ .x₁ ⟩⌢ .(u₁ ⌢ ⟨ x₂ ⟩ ⌢ v₁) ≌ .(u₂ ⌢ ⟨ x₁ ⟩ ⌢ v₂) with-⟦ u₂ , v₂ , P₂ , refl ⟧ | ⟨ .x₁ ⟩⌢ .(u₁ ⌢ v₁) ≌ .(u₃ ⌢ x₁ ∷ v₃) with-⟦ u₃ , v₃ , P₃ , refl ⟧ with ⟨ x₂ ⟩⌢ u₃ ⌢ v₃ ≌ u₁ ⌢ ⟨ x₂ ⟩ ⌢ v₁ with-⟦ u₁ , v₁ , symmetricity P₃ , refl ⟧
-... | q with transitivity q P₂
-... | r = lemma x₁ (⟨ x₂ ⟩ ⌢ u₃) v₃ u₂ v₂ r
+transitivity {xs = ⟨⟩} {⟨⟩} {zs} (∅ refl) q = q
+transitivity {xs = x ∷ xs} {⟨⟩} {zs} ⟨ .x ⟩⌢ .xs ≌ .⟨⟩ with-⟦ u , v , P , p ⟧ q = ⊥-elim (⟨⟩≢xs⌢w∷ys x u v p)
+transitivity {xs = xs} {x ∷ ys} {.(u ⌢ x ∷ v)} p ⟨ .x ⟩⌢ .ys ≌ .(u ⌢ x ∷ v) with-⟦ u , v , P₁ , refl ⟧ with symmetricity p
+transitivity {_} {.(u₁ ⌢ x ∷ v₁)} {x ∷ ys} {.(u ⌢ ⟨ x ⟩ ⌢ v)} p ⟨ .x ⟩⌢ .ys ≌ .(u ⌢ ⟨ x ⟩ ⌢ v) with-⟦ u , v , P₁ , refl ⟧ | ⟨ .x ⟩⌢ .ys ≌ .(u₁ ⌢ x ∷ v₁) with-⟦ u₁ , v₁ , P₂ , refl ⟧
+  = push-in x u₁ v₁ u v (transitivity (symmetricity P₂) P₁)
