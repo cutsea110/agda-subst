@@ -181,7 +181,9 @@ pull-out : {A : Set}(x : A)(xs ys : List A) → P (xs ⌢ ⟨ x ⟩ ⌢ ys) (⟨
 pull-out x xs ys = inverse x xs ys (xs ⌢ ys) (reflexivity (xs ⌢ ys))
 
 lemma : {A : Set}(x : A)(xs ys us vs : List A) → P (xs ⌢ ys) (us ⌢ vs) → P (xs ⌢ ⟨ x ⟩ ⌢ ys) (us ⌢ ⟨ x ⟩ ⌢ vs)
-lemma x xs ys us vs = {!!}
+lemma x ⟨⟩ ys ⟨⟩ vs p = ⟨ x ⟩⌢ ys ≌ x ∷ vs with-⟦ ⟨⟩ , vs , p , refl ⟧
+lemma x ⟨⟩ ys (x₁ ∷ us) vs p = ⟨ x ⟩⌢ ys ≌ x₁ ∷ us ⌢ x ∷ vs with-⟦ x₁ ∷ us , vs , p , refl ⟧
+lemma x (x₁ ∷ xs) ys us vs p = {!!}
 
 -- | Law III
 transitivity : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
