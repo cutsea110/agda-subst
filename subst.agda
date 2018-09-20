@@ -180,7 +180,10 @@ swap x y xs ys = ⟨ x ⟩⌢ xs ⌢ ⟨ y ⟩ ⌢ ys ≌ ⟨ y ⟩ ⌢ xs ⌢ �
 transposition : {A : Set}(i j : A)(xs ys zs : List A) → P (xs ⌢ ⟨ i ⟩ ⌢ ys ⌢ ⟨ j ⟩ ⌢ zs) (xs ⌢ ⟨ j ⟩ ⌢ ys ⌢ ⟨ i ⟩ ⌢ zs)
 transposition i j ⟨⟩ ys zs
   = ⟨ i ⟩⌢ ys ⌢ ⟨ j ⟩ ⌢ zs ≌ ⟨ j ⟩ ⌢ ys ⌢ ⟨ i ⟩ ⌢ zs with-⟦ ⟨ j ⟩ ⌢ ys , zs , inverse j ys zs (ys ⌢ zs) (reflexivity (ys ⌢ zs)) , refl ⟧
-transposition i j (x ∷ xs) ys zs = {!!}
+transposition i j (x ∷ xs) ys zs with swap x i xs (ys ⌢ ⟨ j ⟩ ⌢ zs)
+... | p with swap i j (xs ⌢ ⟨ x ⟩ ⌢ ys) zs
+... | q with swap j x xs (ys ⌢ ⟨ i ⟩ ⌢ zs)
+... | r = {!!}
 
 -- | Law III
 transitivity : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
