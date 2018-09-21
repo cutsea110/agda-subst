@@ -181,7 +181,10 @@ test : {A : Set}(x y z : A)
   → P (⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩) (⟨ y ⟩ ⌢ ⟨ x ⟩ ⌢ ⟨ z ⟩)
   → P (⟨ y ⟩ ⌢ ⟨ x ⟩ ⌢ ⟨ z ⟩) (⟨ y ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ x ⟩)
   → P (⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩) (⟨ y ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ x ⟩)
-test x y z p q = xyz≌yzx x y z
+test x y z
+  ⟨ .x ⟩⌢ .(y ∷ z ∷ ⟨⟩) ≌ .(y ∷ x ∷ z ∷ ⟨⟩) with-⟦ u₁ , v₁ , P₁ , p₁ ⟧
+  ⟨ .y ⟩⌢ .(x ∷ z ∷ ⟨⟩) ≌ .(y ∷ z ∷ x ∷ ⟨⟩) with-⟦ u₂ , v₂ , P₂ , p₂ ⟧
+  = {!!}
 
 -- | Law III
 transitivity : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
