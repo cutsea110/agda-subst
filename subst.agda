@@ -177,6 +177,21 @@ symmetricity {xs = .(x ∷ s)} {.(u ⌢ x ∷ v)} ⟨ x ⟩⌢ s ≌ .(u ⌢ x �
 swap : {A : Set}(x y : A)(xs ys : List A) → P (⟨ x ⟩ ⌢ xs ⌢ ⟨ y ⟩ ⌢ ys) (⟨ y ⟩ ⌢ xs ⌢ ⟨ x ⟩ ⌢ ys)
 swap x y xs ys = ⟨ x ⟩⌢ xs ⌢ ⟨ y ⟩ ⌢ ys ≌ ⟨ y ⟩ ⌢ xs ⌢ ⟨ x ⟩ ⌢ ys with-⟦ ⟨ y ⟩ ⌢ xs , ys , inverse y xs ys (xs ⌢ ys) (reflexivity (xs ⌢ ys)) , refl ⟧
 
+test : {A : Set}(x y z : A)
+  → P (⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩) (⟨ y ⟩ ⌢ ⟨ x ⟩ ⌢ ⟨ z ⟩)
+  → P (⟨ y ⟩ ⌢ ⟨ x ⟩ ⌢ ⟨ z ⟩) (⟨ y ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ x ⟩)
+  → P (⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩) (⟨ y ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ x ⟩)
+test x y z p q = ⟨ x ⟩⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩ ≌ ⟨ y ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ x ⟩ with-⟦
+                   ⟨ y ⟩ ⌢ ⟨ z ⟩ ,
+                   ⟨⟩ ,
+                   ⟨ y ⟩⌢ ⟨ z ⟩ ≌ ⟨ y ⟩ ⌢ ⟨ z ⟩ with-⟦
+                   ⟨⟩ ,
+                   ⟨ z ⟩ ,
+                   ⟨ z ⟩⌢ ⟨⟩ ≌ ⟨ z ⟩ ⌢ ⟨⟩ with-⟦ ⟨⟩ , ⟨⟩ , (∅ refl) , refl ⟧ , refl
+                   ⟧
+                   , refl
+                   ⟧
+
 -- | Law III
 transitivity : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
 transitivity {xs = .⟨⟩} {.⟨⟩} {zs} (∅ refl) q = q
