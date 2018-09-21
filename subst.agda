@@ -177,6 +177,9 @@ symmetricity {xs = .(x ∷ s)} {.(u ⌢ x ∷ v)} ⟨ x ⟩⌢ s ≌ .(u ⌢ x �
 swap : {A : Set}(x y : A)(xs ys : List A) → P (⟨ x ⟩ ⌢ xs ⌢ ⟨ y ⟩ ⌢ ys) (⟨ y ⟩ ⌢ xs ⌢ ⟨ x ⟩ ⌢ ys)
 swap x y xs ys = ⟨ x ⟩⌢ xs ⌢ ⟨ y ⟩ ⌢ ys ≌ ⟨ y ⟩ ⌢ xs ⌢ ⟨ x ⟩ ⌢ ys with-⟦ ⟨ y ⟩ ⌢ xs , ys , inverse y xs ys (xs ⌢ ys) (reflexivity (xs ⌢ ys)) , refl ⟧
 
+-- | Law III
+transitivity : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
+transitivity {xs = xs} {ys} {zs} p q = {!!}
 
 transposition : {A : Set}(i j : A)(xs ys zs : List A) → P (xs ⌢ ⟨ i ⟩ ⌢ ys ⌢ ⟨ j ⟩ ⌢ zs) (xs ⌢ ⟨ j ⟩ ⌢ ys ⌢ ⟨ i ⟩ ⌢ zs)
 transposition i j ⟨⟩ ys zs
@@ -186,7 +189,3 @@ transposition i j (x ∷ xs) ys zs with swap x i xs (ys ⌢ ⟨ j ⟩ ⌢ zs) | 
     | ⟨ .i ⟩⌢ .((xs ⌢ ⟨ x ⟩ ⌢ ys) ⌢ ⟨ j ⟩ ⌢ zs) ≌ .(⟨ j ⟩ ⌢ (xs ⌢ ⟨ x ⟩ ⌢ ys) ⌢ ⟨ i ⟩ ⌢ zs) with-⟦ u₂ , v₂ , P₂ , p₂ ⟧
     | ⟨ .j ⟩⌢ .(xs ⌢ ⟨ x ⟩ ⌢ ys ⌢ ⟨ i ⟩ ⌢ zs) ≌ .(⟨ x ⟩ ⌢ xs ⌢ ⟨ j ⟩ ⌢ ys ⌢ ⟨ i ⟩ ⌢ zs) with-⟦ u₃ , v₃ , P₃ , p₃ ⟧
     = {!!}
-
--- | Law III
-transitivity : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
-transitivity {xs = xs} {ys} {zs} p q = {!!}
