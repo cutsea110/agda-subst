@@ -179,7 +179,9 @@ swap x y xs ys = ⟨ x ⟩⌢ xs ⌢ ⟨ y ⟩ ⌢ ys ≌ ⟨ y ⟩ ⌢ xs ⌢ �
 
 -- | Law III
 transitivity : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
-transitivity {xs = xs} {ys} {zs} p q = {!!}
+transitivity {xs = .⟨⟩} {.⟨⟩} {zs} (∅ refl) q = q
+transitivity {xs = .(x ∷ s)} {.⟨⟩} {.⟨⟩} ⟨ x ⟩⌢ s ≌ .⟨⟩ with-⟦ x₁ ⟧ (∅ refl) = ⊥-elim (¬P[x∷xs]⟨⟩ ⟨ x ⟩⌢ s ≌ ⟨⟩ with-⟦ x₁ ⟧)
+transitivity {xs = .(x ∷ s)} {.(x₁ ∷ s₁)} {.t} ⟨ x ⟩⌢ s ≌ .(x₁ ∷ s₁) with-⟦ u₁ , v₁ , P₁ , p₁ ⟧ ⟨ x₁ ⟩⌢ s₁ ≌ t with-⟦ u₂ , v₂ , P₂ , p₂ ⟧ = {!!}
 
 transposition : {A : Set}(i j : A)(xs ys zs : List A) → P (xs ⌢ ⟨ i ⟩ ⌢ ys ⌢ ⟨ j ⟩ ⌢ zs) (xs ⌢ ⟨ j ⟩ ⌢ ys ⌢ ⟨ i ⟩ ⌢ zs)
 transposition i j ⟨⟩ ys zs
