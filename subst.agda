@@ -174,22 +174,17 @@ symmetricity : {A : Set} {xs ys : List A} → P xs ys → P ys xs
 symmetricity {xs = .⟨⟩} {.⟨⟩} (∅ refl) = ∅ refl
 symmetricity {xs = .(x ∷ s)} {.(u ⌢ x ∷ v)} ⟨ x ⟩⌢ s ≌ .(u ⌢ x ∷ v) with-⟦ u , v , P₁ , refl ⟧ = inverse x u v s (symmetricity P₁)
 
-{--
-push-in : {A : Set}(x : A)(xs ys : List A) → P (⟨ x ⟩ ⌢ xs ⌢ ys) (xs ⌢ ⟨ x ⟩ ⌢ ys)
-push-in x xs ys = ⟨ x ⟩⌢ xs ⌢ ys ≌ xs ⌢ ⟨ x ⟩ ⌢ ys with-⟦ xs , ys , reflexivity (xs ⌢ ys) , refl ⟧
+swap : {A : Set}(x y : A)(xs ys : List A) → P (⟨ x ⟩ ⌢ xs ⌢ ⟨ y ⟩ ⌢ ys) (⟨ y ⟩ ⌢ xs ⌢ ⟨ x ⟩ ⌢ ys)
+swap x y xs ys = ⟨ x ⟩⌢ xs ⌢ ⟨ y ⟩ ⌢ ys ≌ ⟨ y ⟩ ⌢ xs ⌢ ⟨ x ⟩ ⌢ ys with-⟦ ⟨ y ⟩ ⌢ xs , ys , inverse y xs ys (xs ⌢ ys) (reflexivity (xs ⌢ ys)) , refl ⟧
 
-pull-out : {A : Set}(x : A)(xs ys : List A) → P (xs ⌢ ⟨ x ⟩ ⌢ ys) (⟨ x ⟩ ⌢ xs ⌢ ys)
-pull-out x xs ys = inverse x xs ys (xs ⌢ ys) (reflexivity (xs ⌢ ys))
---}
-
-push-in : {A : Set}(x : A)(xs ys us vs : List A) → P (xs ⌢ ys) (us ⌢ vs) → P (xs ⌢ ⟨ x ⟩ ⌢ ys) (us ⌢ ⟨ x ⟩ ⌢ vs)
-push-in x xs ys us vs prf = {!!}
-
+transposition : {A : Set}(i j : A)(xs ys zs : List A) → P (xs ⌢ ⟨ i ⟩ ⌢ ys ⌢ ⟨ j ⟩ ⌢ zs) (xs ⌢ ⟨ j ⟩ ⌢ ys ⌢ ⟨ i ⟩ ⌢ zs)
+transposition i j ⟨⟩ ys zs
+  = ⟨ i ⟩⌢ ys ⌢ ⟨ j ⟩ ⌢ zs ≌ ⟨ j ⟩ ⌢ ys ⌢ ⟨ i ⟩ ⌢ zs with-⟦ ⟨ j ⟩ ⌢ ys , zs , inverse j ys zs (ys ⌢ zs) (reflexivity (ys ⌢ zs)) , refl ⟧
+transposition i j (x ∷ xs) ys zs with swap x i xs (ys ⌢ ⟨ j ⟩ ⌢ zs)
+... | p with swap i j (xs ⌢ ⟨ x ⟩ ⌢ ys) zs
+... | q with swap j x xs (ys ⌢ ⟨ i ⟩ ⌢ zs)
+... | r = {!!}
 
 -- | Law III
 transitivity : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
-transitivity {xs = ⟨⟩} {⟨⟩} {zs} (∅ refl) q = q
-transitivity {xs = x ∷ xs} {⟨⟩} {zs} ⟨ .x ⟩⌢ .xs ≌ .⟨⟩ with-⟦ u , v , P , p ⟧ q = ⊥-elim (⟨⟩≢xs⌢w∷ys x u v p)
-transitivity {xs = xs} {x ∷ ys} {.(u ⌢ x ∷ v)} p ⟨ .x ⟩⌢ .ys ≌ .(u ⌢ x ∷ v) with-⟦ u , v , P₁ , refl ⟧ with symmetricity p
-transitivity {_} {.(u₁ ⌢ x ∷ v₁)} {x ∷ ys} {.(u ⌢ ⟨ x ⟩ ⌢ v)} p ⟨ .x ⟩⌢ .ys ≌ .(u ⌢ ⟨ x ⟩ ⌢ v) with-⟦ u , v , P₁ , refl ⟧ | ⟨ .x ⟩⌢ .ys ≌ .(u₁ ⌢ x ∷ v₁) with-⟦ u₁ , v₁ , P₂ , refl ⟧
-  = push-in x u₁ v₁ u v (transitivity (symmetricity P₂) P₁)
+transitivity {xs = xs} {ys} {zs} p q = {!!}
