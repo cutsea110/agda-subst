@@ -21,6 +21,10 @@ data P {A : Set} : List A → List A → Set where
 ⟨⟩-cancel (x ∷ xs) = cong (x ∷_) (⟨⟩-cancel xs)
 
 -- | list level utility
+⟨⟩≡xs⌢ys⇒xs≡⟨⟩∧ys≡⟨⟩ : {A : Set}(xs ys : List A) → ⟨⟩ ≡ xs ⌢ ys → xs ≡ ⟨⟩ ∧ ys ≡ ⟨⟩
+⟨⟩≡xs⌢ys⇒xs≡⟨⟩∧ys≡⟨⟩ xs ys = {!!}
+
+-- | list level utility
 assoc-list : {A : Set}(x y z : List A) → (x ⌢ y) ⌢ z ≡ x ⌢ (y ⌢ z)
 assoc-list ⟨⟩ ys zs = refl
 assoc-list (x ∷ xs) ys zs = cong (x ∷_) (assoc-list xs ys zs)
@@ -181,10 +185,8 @@ test : {A : Set}(x y z : A)
   → P (⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩) (⟨ y ⟩ ⌢ ⟨ x ⟩ ⌢ ⟨ z ⟩)
   → P (⟨ y ⟩ ⌢ ⟨ x ⟩ ⌢ ⟨ z ⟩) (⟨ y ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ x ⟩)
   → P (⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩) (⟨ y ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ x ⟩)
-test x y z
-  ⟨ .x ⟩⌢ .(y ∷ z ∷ ⟨⟩) ≌ .(y ∷ x ∷ z ∷ ⟨⟩) with-⟦ u₁ , v₁ , P₁ , p₁ ⟧
-  ⟨ .y ⟩⌢ .(x ∷ z ∷ ⟨⟩) ≌ .(y ∷ z ∷ x ∷ ⟨⟩) with-⟦ u₂ , v₂ , P₂ , p₂ ⟧
-  = {!!}
+test x y z ⟨ .x ⟩⌢ .(y ∷ z ∷ ⟨⟩) ≌ .(y ∷ x ∷ z ∷ ⟨⟩) with-⟦ u , v , ⟨ .y ⟩⌢ .(z ∷ ⟨⟩) ≌ .(u ⌢ v) with-⟦ u₁ , v₁ , ⟨ .z ⟩⌢ .⟨⟩ ≌ .(u₁ ⌢ v₁) with-⟦ u₂ , v₂ , (∅ prf) , p₂ ⟧ , p₁ ⟧ , p ⟧ q = {!!}
+
 
 -- | Law III
 transitivity : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
