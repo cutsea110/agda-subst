@@ -22,7 +22,9 @@ data P {A : Set} : List A → List A → Set where
 
 -- | list level utility
 ⟨⟩≡xs⌢ys⇒xs≡⟨⟩∧ys≡⟨⟩ : {A : Set}(xs ys : List A) → ⟨⟩ ≡ xs ⌢ ys → xs ≡ ⟨⟩ ∧ ys ≡ ⟨⟩
-⟨⟩≡xs⌢ys⇒xs≡⟨⟩∧ys≡⟨⟩ xs ys = {!!}
+⟨⟩≡xs⌢ys⇒xs≡⟨⟩∧ys≡⟨⟩ ⟨⟩ ⟨⟩ prf = refl , refl
+⟨⟩≡xs⌢ys⇒xs≡⟨⟩∧ys≡⟨⟩ ⟨⟩ (x ∷ ys) ()
+⟨⟩≡xs⌢ys⇒xs≡⟨⟩∧ys≡⟨⟩ (x ∷ xs) ys ()
 
 -- | list level utility
 assoc-list : {A : Set}(x y z : List A) → (x ⌢ y) ⌢ z ≡ x ⌢ (y ⌢ z)
