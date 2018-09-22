@@ -183,7 +183,6 @@ symmetricity {xs = .(x ∷ s)} {.(u ⌢ x ∷ v)} ⟨ x ⟩⌢ s ≌ .(u ⌢ x �
 swap : {A : Set}(x y : A)(xs ys : List A) → P (⟨ x ⟩ ⌢ xs ⌢ ⟨ y ⟩ ⌢ ys) (⟨ y ⟩ ⌢ xs ⌢ ⟨ x ⟩ ⌢ ys)
 swap x y xs ys = ⟨ x ⟩⌢ xs ⌢ ⟨ y ⟩ ⌢ ys ≌ ⟨ y ⟩ ⌢ xs ⌢ ⟨ x ⟩ ⌢ ys with-⟦ ⟨ y ⟩ ⌢ xs , ys , inverse y xs ys (xs ⌢ ys) (reflexivity (xs ⌢ ys)) , refl ⟧
 
-
 del-head : {A : Set}(x : A)(xs ys : List A) → P (⟨ x ⟩ ⌢ xs) (⟨ x ⟩ ⌢ ys) → P xs ys
 del-head x xs ys prf = {!!}
 
@@ -198,8 +197,7 @@ transitivity : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
 transitivity {xs = xs} {.⟨⟩} {.⟨⟩} p (∅ refl) = p
 transitivity {xs = xs} {.(x ∷ s)} {.t} p ⟨ x ⟩⌢ s ≌ t with-⟦ u₂ , v₂ , P₂ , p₂ ⟧ with symmetricity p
 transitivity {_} {.t} {.(x ∷ ⟨⟩ ⌢ s)} {.t₁} p ⟨ x ⟩⌢ s ≌ t₁ with-⟦ u₂ , v₂ , P₂ , p₂ ⟧ | ⟨ .x ⟩⌢ .s ≌ t with-⟦ u₁ , v₁ , invP₁ , p₁ ⟧ with symmetricity invP₁
-... | P₁ with transitivity P₁ P₂
-... | q = {!!}
+... | P₁ rewrite p₁ | p₂ = lemma x u₁ v₁ u₂ v₂ (transitivity P₁ P₂)
 
 transposition : {A : Set}(i j : A)(xs ys zs : List A) → P (xs ⌢ ⟨ i ⟩ ⌢ ys ⌢ ⟨ j ⟩ ⌢ zs) (xs ⌢ ⟨ j ⟩ ⌢ ys ⌢ ⟨ i ⟩ ⌢ zs)
 transposition i j ⟨⟩ ys zs
