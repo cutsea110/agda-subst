@@ -201,12 +201,3 @@ transitivity {xs = xs} {.⟨⟩} {.⟨⟩} p (∅ refl) = p
 transitivity {xs = xs} {.(x ∷ s)} {.t} p ⟨ x ⟩⌢ s ≌ t with-⟦ u₂ , v₂ , P₂ , p₂ ⟧ with symmetricity p
 transitivity {_} {.t} {.(x ∷ ⟨⟩ ⌢ s)} {.t₁} p ⟨ x ⟩⌢ s ≌ t₁ with-⟦ u₂ , v₂ , P₂ , p₂ ⟧ | ⟨ .x ⟩⌢ .s ≌ t with-⟦ u₁ , v₁ , invP₁ , p₁ ⟧ with symmetricity invP₁
 ... | P₁ rewrite p₁ | p₂ = lemma x u₁ v₁ u₂ v₂ (transitivity P₁ P₂)
-
-transposition : {A : Set}(i j : A)(xs ys zs : List A) → P (xs ⌢ ⟨ i ⟩ ⌢ ys ⌢ ⟨ j ⟩ ⌢ zs) (xs ⌢ ⟨ j ⟩ ⌢ ys ⌢ ⟨ i ⟩ ⌢ zs)
-transposition i j ⟨⟩ ys zs
-  = ⟨ i ⟩⌢ ys ⌢ ⟨ j ⟩ ⌢ zs ≌ ⟨ j ⟩ ⌢ ys ⌢ ⟨ i ⟩ ⌢ zs with-⟦ ⟨ j ⟩ ⌢ ys , zs , inverse j ys zs (ys ⌢ zs) (reflexivity (ys ⌢ zs)) , refl ⟧
-transposition i j (x ∷ xs) ys zs with swap x i xs (ys ⌢ ⟨ j ⟩ ⌢ zs) | swap i j (xs ⌢ ⟨ x ⟩ ⌢ ys) zs | swap j x xs (ys ⌢ ⟨ i ⟩ ⌢ zs)
-... | ⟨ .x ⟩⌢ .(xs ⌢ ⟨ i ⟩ ⌢ ys ⌢ ⟨ j ⟩ ⌢ zs) ≌ .(⟨ i ⟩ ⌢ xs ⌢ ⟨ x ⟩ ⌢ ys ⌢ ⟨ j ⟩ ⌢ zs) with-⟦ u₁ , v₁ , P₁ , p₁ ⟧
-    | ⟨ .i ⟩⌢ .((xs ⌢ ⟨ x ⟩ ⌢ ys) ⌢ ⟨ j ⟩ ⌢ zs) ≌ .(⟨ j ⟩ ⌢ (xs ⌢ ⟨ x ⟩ ⌢ ys) ⌢ ⟨ i ⟩ ⌢ zs) with-⟦ u₂ , v₂ , P₂ , p₂ ⟧
-    | ⟨ .j ⟩⌢ .(xs ⌢ ⟨ x ⟩ ⌢ ys ⌢ ⟨ i ⟩ ⌢ zs) ≌ .(⟨ x ⟩ ⌢ xs ⌢ ⟨ j ⟩ ⌢ ys ⌢ ⟨ i ⟩ ⌢ zs) with-⟦ u₃ , v₃ , P₃ , p₃ ⟧
-    = {!!}
