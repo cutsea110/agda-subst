@@ -183,18 +183,13 @@ symmetricity {xs = .(x ∷ s)} {.(u ⌢ x ∷ v)} ⟨ x ⟩⌢ s ≌ .(u ⌢ x �
 swap : {A : Set}(x y : A)(xs ys : List A) → P (⟨ x ⟩ ⌢ xs ⌢ ⟨ y ⟩ ⌢ ys) (⟨ y ⟩ ⌢ xs ⌢ ⟨ x ⟩ ⌢ ys)
 swap x y xs ys = ⟨ x ⟩⌢ xs ⌢ ⟨ y ⟩ ⌢ ys ≌ ⟨ y ⟩ ⌢ xs ⌢ ⟨ x ⟩ ⌢ ys with-⟦ ⟨ y ⟩ ⌢ xs , ys , inverse y xs ys (xs ⌢ ys) (reflexivity (xs ⌢ ys)) , refl ⟧
 
-test : {A : Set}(x y z : A)
-  → P (⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩) (⟨ y ⟩ ⌢ ⟨ x ⟩ ⌢ ⟨ z ⟩)
-  → P (⟨ y ⟩ ⌢ ⟨ x ⟩ ⌢ ⟨ z ⟩) (⟨ y ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ x ⟩)
-  → P (⟨ x ⟩ ⌢ ⟨ y ⟩ ⌢ ⟨ z ⟩) (⟨ y ⟩ ⌢ ⟨ z ⟩ ⌢ ⟨ x ⟩)
-test x y z ⟨ .x ⟩⌢ .(y ∷ z ∷ ⟨⟩) ≌ .(y ∷ x ∷ z ∷ ⟨⟩) with-⟦ u , v , ⟨ .y ⟩⌢ .(z ∷ ⟨⟩) ≌ .(u ⌢ v) with-⟦ u₁ , v₁ , ⟨ .z ⟩⌢ .⟨⟩ ≌ .(u₁ ⌢ v₁) with-⟦ u₂ , v₂ , (∅ prf) , p₂ ⟧ , p₁ ⟧ , p ⟧ q = {!!}
-
-
 -- | Law III
 transitivity : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
-transitivity {xs = .⟨⟩} {.⟨⟩} {zs} (∅ refl) q = q
-transitivity {xs = .(x ∷ s)} {.⟨⟩} {.⟨⟩} ⟨ x ⟩⌢ s ≌ .⟨⟩ with-⟦ x₁ ⟧ (∅ refl) = ⊥-elim (¬P[x∷xs]⟨⟩ ⟨ x ⟩⌢ s ≌ ⟨⟩ with-⟦ x₁ ⟧)
-transitivity {xs = .(x ∷ s)} {.(x₁ ∷ s₁)} {.t} ⟨ x ⟩⌢ s ≌ .(x₁ ∷ s₁) with-⟦ u₁ , v₁ , P₁ , p₁ ⟧ ⟨ x₁ ⟩⌢ s₁ ≌ t with-⟦ u₂ , v₂ , P₂ , p₂ ⟧ = {!!}
+transitivity {xs = xs} {.⟨⟩} {.⟨⟩} p (∅ refl) = p
+transitivity {xs = xs} {.(x ∷ s)} {.t} p ⟨ x ⟩⌢ s ≌ t with-⟦ u₂ , v₂ , P₂ , p₂ ⟧ with symmetricity p
+transitivity {_} {.t} {.(x ∷ ⟨⟩ ⌢ s)} {.t₁} p ⟨ x ⟩⌢ s ≌ t₁ with-⟦ u₂ , v₂ , P₂ , p₂ ⟧ | ⟨ .x ⟩⌢ .s ≌ t with-⟦ u₁ , v₁ , invP₁ , p₁ ⟧ with symmetricity invP₁
+... | P₁ with transitivity P₁ P₂
+... | q = {!!}
 
 transposition : {A : Set}(i j : A)(xs ys zs : List A) → P (xs ⌢ ⟨ i ⟩ ⌢ ys ⌢ ⟨ j ⟩ ⌢ zs) (xs ⌢ ⟨ j ⟩ ⌢ ys ⌢ ⟨ i ⟩ ⌢ zs)
 transposition i j ⟨⟩ ys zs
