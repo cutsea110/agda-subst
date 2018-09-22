@@ -185,9 +185,7 @@ swap x y xs ys = ⟨ x ⟩⌢ xs ⌢ ⟨ y ⟩ ⌢ ys ≌ ⟨ y ⟩ ⌢ xs ⌢ �
 
 
 del-head : {A : Set}(x : A)(xs ys : List A) → P (⟨ x ⟩ ⌢ xs) (⟨ x ⟩ ⌢ ys) → P xs ys
-del-head x xs ys ⟨ .x ⟩⌢ .xs ≌ .(x ∷ ys) with-⟦ ⟨⟩ , .ys , P₁ , refl ⟧ = P₁
-del-head x xs .(u ⌢ x ∷ v) ⟨ .x ⟩⌢ .xs ≌ .(x ∷ u ⌢ x ∷ v) with-⟦ .x ∷ u , v , P₁ , refl ⟧ with ⟨ x ⟩⌢ u ⌢ v ≌ u ⌢ ⟨ x ⟩ ⌢ v with-⟦ u , v , reflexivity (u ⌢ v) , refl ⟧
-... | q = {!!}
+del-head x xs ys prf = {!!}
 
 lemma : {A : Set}(x : A)(xs ys us vs : List A) → P (xs ⌢ ys) (us ⌢ vs) → P (xs ⌢ ⟨ x ⟩ ⌢ ys) (us ⌢ ⟨ x ⟩ ⌢ vs)
 lemma x xs ys us vs prf  with symmetricity prf
