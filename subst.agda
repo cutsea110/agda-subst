@@ -183,6 +183,13 @@ symmetricity {xs = .(x ∷ s)} {.(u ⌢ x ∷ v)} ⟨ x ⟩⌢ s ≌ .(u ⌢ x �
 swap : {A : Set}(x y : A)(xs ys : List A) → P (⟨ x ⟩ ⌢ xs ⌢ ⟨ y ⟩ ⌢ ys) (⟨ y ⟩ ⌢ xs ⌢ ⟨ x ⟩ ⌢ ys)
 swap x y xs ys = ⟨ x ⟩⌢ xs ⌢ ⟨ y ⟩ ⌢ ys ≌ ⟨ y ⟩ ⌢ xs ⌢ ⟨ x ⟩ ⌢ ys with-⟦ ⟨ y ⟩ ⌢ xs , ys , inverse y xs ys (xs ⌢ ys) (reflexivity (xs ⌢ ys)) , refl ⟧
 
+
+lemma : {A : Set}(x : A)(xs ys us vs : List A) → P (xs ⌢ ys) (us ⌢ vs) → P (xs ⌢ ⟨ x ⟩ ⌢ ys) (us ⌢ ⟨ x ⟩ ⌢ vs)
+lemma x xs ys us vs prf  with symmetricity prf
+... | q with symmetricity (⟨ x ⟩⌢ us ⌢ vs ≌ xs ⌢ ⟨ x ⟩ ⌢ ys with-⟦ xs , ys , q , refl ⟧)
+... | r with ⟨ x ⟩⌢ xs ⌢ ⟨ x ⟩ ⌢ ys ≌ ⟨ x ⟩ ⌢ us ⌢ ⟨ x ⟩ ⌢ vs with-⟦ ⟨ x ⟩ ⌢ us , vs , r , refl ⟧
+... | w = {!!}
+
 -- | Law III
 transitivity : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
 transitivity {xs = xs} {.⟨⟩} {.⟨⟩} p (∅ refl) = p
