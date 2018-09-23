@@ -14,6 +14,9 @@ P s t = P' t s
 same-head : {A : Set}{x y : A}{xs ys : List A} → x ∷ xs ≡ y ∷ ys → x ≡ y
 same-head refl = refl
 
+same-tail : {A : Set}{x : A}{xs ys : List A} → x ∷ xs ≡ x ∷ ys → xs ≡ ys
+same-tail refl = refl
+
 -- | inverse constructor for Definition of P's
 inverse : {A : Set}(x : A) (u v s : List A) → P (u ⌢ v) s → P (u ⌢ ⟨ x ⟩ ⌢ v) (⟨ x ⟩ ⌢ s)
 inverse x ⟨⟩ v s p = ⟨ x ⟩⌢ v with-⟦ ⟨⟩ , s , p , refl ⟧
@@ -30,10 +33,14 @@ symmetricity : {A : Set} {xs ys : List A} → P xs ys → P ys xs
 symmetricity {xs = .⟨⟩} {.⟨⟩} (∅ refl) = ∅ refl
 symmetricity {xs = .(x ∷ s)} {.(u ⌢ x ∷ v)} ⟨ x ⟩⌢ s with-⟦ u , v , P₁ , refl ⟧ = inverse x u v s (symmetricity P₁)
 
+swap : {A : Set}(x : A){xs : List A}(u v : List A) → P xs (⟨ x ⟩ ⌢ u ⌢ v) → P xs (u ⌢ ⟨ x ⟩ ⌢ v)
+swap x {.⟨⟩} u v (∅ ())
+swap x {.(x₁ ∷ s)} u v ⟨ x₁ ⟩⌢ s with-⟦ u₂ , v₂ , P₂ , p₂ ⟧ = {!!}
+
 del-head : {A : Set}(x : A)(xs ys : List A) → P (⟨ x ⟩ ⌢ xs) (⟨ x ⟩ ⌢ ys) → P xs ys
 del-head x xs ys ⟨ .x ⟩⌢ .xs with-⟦ ⟨⟩ , .ys , P , refl ⟧ = P
 del-head x xs ys ⟨ .x ⟩⌢ .xs with-⟦ x₁ ∷ u , v , P , p ⟧ with same-head {x = x}{x₁}{ys}{u ⌢ x ∷ v} p
-del-head x xs .(u ⌢ x ∷ v) ⟨ .x ⟩⌢ .xs with-⟦ .x ∷ u , v , P , refl ⟧ | refl = ?
+del-head x xs .(u ⌢ x ∷ v) ⟨ .x ⟩⌢ .xs with-⟦ .x ∷ u , v , P , refl ⟧ | refl = swap x u v P
 
 lemma : {A : Set}(x : A)(xs ys us vs : List A) → P (xs ⌢ ys) (us ⌢ vs) → P (xs ⌢ ⟨ x ⟩ ⌢ ys) (us ⌢ ⟨ x ⟩ ⌢ vs)
 lemma x xs ys us vs prf with symmetricity prf
