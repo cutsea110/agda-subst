@@ -27,9 +27,21 @@ symmetricity : {A : Set} {xs ys : List A} → P xs ys → P ys xs
 symmetricity {xs = .⟨⟩} {.⟨⟩} (∅ refl) = ∅ refl
 symmetricity {xs = .(x ∷ s)} {.(u ⌢ x ∷ v)} ⟨ x ⟩⌢ s with-⟦ u , v , P₁ , refl ⟧ = inverse x u v s (symmetricity P₁)
 
+del-head : {A : Set}(x : A)(xs ys : List A) → P (⟨ x ⟩ ⌢ xs) (⟨ x ⟩ ⌢ ys) → P xs ys
+del-head x xs ys prf = {!!}
+
+lemma : {A : Set}(x : A)(xs ys us vs : List A) → P (xs ⌢ ys) (us ⌢ vs) → P (xs ⌢ ⟨ x ⟩ ⌢ ys) (us ⌢ ⟨ x ⟩ ⌢ vs)
+lemma x xs ys us vs prf with symmetricity prf
+... | q with symmetricity (⟨ x ⟩⌢ us ⌢ vs with-⟦ xs , ys , q , refl ⟧)
+... | r with ⟨ x ⟩⌢ xs ⌢ ⟨ x ⟩ ⌢ ys with-⟦ ⟨ x ⟩ ⌢ us , vs , r , refl ⟧
+... | w = del-head x (xs ⌢ ⟨ x ⟩ ⌢ ys) (us ⌢ ⟨ x ⟩ ⌢ vs) w
+
 -- | Law III
 transitivity : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
-transitivity {xs = xs} {ys} {zs} p q = {!!}
+transitivity {xs = xs} {.⟨⟩} {.⟨⟩} p (∅ refl) = p
+transitivity {xs = xs} {.(x ∷ s)} {zs} p ⟨ x ⟩⌢ s with-⟦ u₂ , v₂ , P₂ , p₂ ⟧ with symmetricity p
+transitivity {xs = xs} {.(x ∷ ⟨⟩ ⌢ s)} {zs} p ⟨ x ⟩⌢ s with-⟦ u₂ , v₂ , P₂ , p₂ ⟧ | ⟨ .x ⟩⌢ .s with-⟦ u₁ , v₁ , invP₁ , p₁ ⟧ with symmetricity invP₁
+... | P₁ rewrite p₁ | p₂ = lemma x u₁ v₁ u₂ v₂ (transitivity P₁ P₂)
 
 {--
 data P {A : Set} : List A → List A → Set where
