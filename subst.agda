@@ -26,6 +26,9 @@ data P {A : Set} : List A → List A → Set where
 ⟨⟩≡xs⌢ys⇒xs≡⟨⟩∧ys≡⟨⟩ ⟨⟩ (x ∷ ys) ()
 ⟨⟩≡xs⌢ys⇒xs≡⟨⟩∧ys≡⟨⟩ (x ∷ xs) ys ()
 
+same : {A : Set}{x y : A}{xs ys : List A} → x ∷ xs ≡ y ∷ ys → x ≡ y ∧ xs ≡ ys
+same refl = refl , refl
+
 -- | list level utility
 assoc-list : {A : Set}(x y z : List A) → (x ⌢ y) ⌢ z ≡ x ⌢ (y ⌢ z)
 assoc-list ⟨⟩ ys zs = refl
@@ -180,12 +183,16 @@ symmetricity : {A : Set} {xs ys : List A} → P xs ys → P ys xs
 symmetricity {xs = .⟨⟩} {.⟨⟩} (∅ refl) = ∅ refl
 symmetricity {xs = .(x ∷ s)} {.(u ⌢ x ∷ v)} ⟨ x ⟩⌢ s ≌ .(u ⌢ x ∷ v) with-⟦ u , v , P₁ , refl ⟧ = inverse x u v s (symmetricity P₁)
 
-swap : {A : Set}(x y : A)(xs ys : List A) → P (⟨ x ⟩ ⌢ xs ⌢ ⟨ y ⟩ ⌢ ys) (⟨ y ⟩ ⌢ xs ⌢ ⟨ x ⟩ ⌢ ys)
-swap x y xs ys = ⟨ x ⟩⌢ xs ⌢ ⟨ y ⟩ ⌢ ys ≌ ⟨ y ⟩ ⌢ xs ⌢ ⟨ x ⟩ ⌢ ys with-⟦ ⟨ y ⟩ ⌢ xs , ys , inverse y xs ys (xs ⌢ ys) (reflexivity (xs ⌢ ys)) , refl ⟧
+-- swap : {A : Set}(x y : A)(xs ys : List A) → P (⟨ x ⟩ ⌢ xs ⌢ ⟨ y ⟩ ⌢ ys) (⟨ y ⟩ ⌢ xs ⌢ ⟨ x ⟩ ⌢ ys)
+-- swap x y xs ys = ⟨ x ⟩⌢ xs ⌢ ⟨ y ⟩ ⌢ ys ≌ ⟨ y ⟩ ⌢ xs ⌢ ⟨ x ⟩ ⌢ ys with-⟦ ⟨ y ⟩ ⌢ xs , ys , inverse y xs ys (xs ⌢ ys) (reflexivity (xs ⌢ ys)) , refl ⟧
 
+swap : ∀ {A} {x : A} {u v xs : List A} → P xs (x ∷ u ⌢ v) → P xs (u ⌢ x ∷ v)
+swap {x = x} {u} {v} {xs} prf = {!!}
 
 del-head : {A : Set}(x : A)(xs ys : List A) → P (⟨ x ⟩ ⌢ xs) (⟨ x ⟩ ⌢ ys) → P xs ys
-del-head x xs ys prf = {!!}
+del-head x xs ys ⟨ .x ⟩⌢ .xs ≌ .(x ∷ ys) with-⟦ ⟨⟩ , .ys , P , refl ⟧ = P
+del-head x xs ys ⟨ .x ⟩⌢ .xs ≌ .(x ∷ ys) with-⟦ x₁ ∷ u , v , P , p ⟧ with same p
+del-head x xs .(u ⌢ x ∷ v) ⟨ .x ⟩⌢ .xs ≌ .(x ∷ ⟨⟩ ⌢ u ⌢ x ∷ v) with-⟦ .x ∷ u , v , P , refl ⟧ | refl , refl = swap {x = x}{u}{v} P
 
 lemma : {A : Set}(x : A)(xs ys us vs : List A) → P (xs ⌢ ys) (us ⌢ vs) → P (xs ⌢ ⟨ x ⟩ ⌢ ys) (us ⌢ ⟨ x ⟩ ⌢ vs)
 lemma x xs ys us vs prf  with symmetricity prf
