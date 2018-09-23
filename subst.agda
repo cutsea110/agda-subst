@@ -1,9 +1,37 @@
 open import Data.List renaming ([] to ⟨⟩; [_] to ⟨_⟩; _++_ to _⌢_)
-open import Relation.Binary.PropositionalEquality as PropEq
+open import Relation.Binary.PropositionalEquality as PropEq hiding (subst)
 open import Data.Product using (∃; _,_) renaming (_×_ to _∧_)
 open import Data.Empty
 open import Relation.Nullary
 
+data P' {A : Set} (t : List A) : (s : List A) → Set where
+  ∅_ : (prf : ⟨⟩ ≡ t) → P' t ⟨⟩
+  ⟨_⟩⌢_with-⟦_⟧ : (x : A) (s : List A) → (∃ λ u → ∃ λ v → P' (u ⌢ v) s ∧ t ≡ u ⌢ ⟨ x ⟩ ⌢ v) → P' t (⟨ x ⟩ ⌢ s)
+
+P : {A : Set} → List A → List A → Set
+P s t = P' t s
+
+-- | inverse constructor for Definition of P's
+inverse : {A : Set}(x : A) (u v s : List A) → P (u ⌢ v) s → P (u ⌢ ⟨ x ⟩ ⌢ v) (⟨ x ⟩ ⌢ s)
+inverse x ⟨⟩ v s p = ⟨ x ⟩⌢ v with-⟦ ⟨⟩ , s , p , refl ⟧
+inverse x (x₁ ∷ u) v .(u₂ ⌢ x₁ ∷ v₂) ⟨ .x₁ ⟩⌢ .(u ⌢ v) with-⟦ u₂ , v₂ , P₂ , refl ⟧
+  = ⟨ x₁ ⟩⌢ u ⌢ x ∷ v with-⟦ x ∷ u₂ , v₂ , inverse x u v (u₂ ⌢ v₂) P₂ , refl ⟧
+
+-- | Law I
+reflexivity : {A : Set} (xs : List A) → P xs xs
+reflexivity ⟨⟩ = ∅ refl
+reflexivity (x ∷ xs) = ⟨ x ⟩⌢ xs with-⟦ ⟨⟩ , xs , reflexivity xs , refl ⟧
+
+-- | Law II
+symmetricity : {A : Set} {xs ys : List A} → P xs ys → P ys xs
+symmetricity {xs = .⟨⟩} {.⟨⟩} (∅ refl) = ∅ refl
+symmetricity {xs = .(x ∷ s)} {.(u ⌢ x ∷ v)} ⟨ x ⟩⌢ s with-⟦ u , v , P₁ , refl ⟧ = inverse x u v s (symmetricity P₁)
+
+-- | Law III
+transitivity : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
+transitivity {xs = xs} {ys} {zs} p q = {!!}
+
+{--
 data P {A : Set} : List A → List A → Set where
   ∅_ : {t : List A} → (prf : ⟨⟩ ≡ t) → P ⟨⟩ t
   ⟨_⟩⌢_≌_with-⟦_⟧ : (x : A) (s t : List A)
@@ -199,3 +227,4 @@ transitivity {xs = xs} {.⟨⟩} {.⟨⟩} p (∅ refl) = p
 transitivity {xs = xs} {.(x ∷ s)} {.t} p ⟨ x ⟩⌢ s ≌ t with-⟦ u₂ , v₂ , P₂ , p₂ ⟧ with symmetricity p
 transitivity {_} {.t} {.(x ∷ ⟨⟩ ⌢ s)} {.t₁} p ⟨ x ⟩⌢ s ≌ t₁ with-⟦ u₂ , v₂ , P₂ , p₂ ⟧ | ⟨ .x ⟩⌢ .s ≌ t with-⟦ u₁ , v₁ , invP₁ , p₁ ⟧ with symmetricity invP₁
 ... | P₁ rewrite p₁ | p₂ = lemma x u₁ v₁ u₂ v₂ (transitivity P₁ P₂)
+--}
