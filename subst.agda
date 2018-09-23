@@ -187,7 +187,8 @@ symmetricity {xs = .(x ∷ s)} {.(u ⌢ x ∷ v)} ⟨ x ⟩⌢ s ≌ .(u ⌢ x �
 -- swap x y xs ys = ⟨ x ⟩⌢ xs ⌢ ⟨ y ⟩ ⌢ ys ≌ ⟨ y ⟩ ⌢ xs ⌢ ⟨ x ⟩ ⌢ ys with-⟦ ⟨ y ⟩ ⌢ xs , ys , inverse y xs ys (xs ⌢ ys) (reflexivity (xs ⌢ ys)) , refl ⟧
 
 swap : ∀ {A} {x : A} {u v xs : List A} → P xs (x ∷ u ⌢ v) → P xs (u ⌢ x ∷ v)
-swap {x = x} {u} {v} {xs} prf = {!!}
+swap {x = x} {u} {v} {.⟨⟩} (∅ ())
+swap {x = x} {u} {v} {.(x₁ ∷ s)} ⟨ x₁ ⟩⌢ s ≌ .(x ∷ u ⌢ v) with-⟦ u₂ , v₂ , P₂ , p₂ ⟧ = {!!}
 
 del-head : {A : Set}(x : A)(xs ys : List A) → P (⟨ x ⟩ ⌢ xs) (⟨ x ⟩ ⌢ ys) → P xs ys
 del-head x xs ys ⟨ .x ⟩⌢ .xs ≌ .(x ∷ ys) with-⟦ ⟨⟩ , .ys , P , refl ⟧ = P
