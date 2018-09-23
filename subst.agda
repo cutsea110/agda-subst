@@ -11,6 +11,9 @@ data P' {A : Set} (t : List A) : (s : List A) → Set where
 P : {A : Set} → List A → List A → Set
 P s t = P' t s
 
+same-head : {A : Set}{x y : A}{xs ys : List A} → x ∷ xs ≡ y ∷ ys → x ≡ y
+same-head refl = refl
+
 -- | inverse constructor for Definition of P's
 inverse : {A : Set}(x : A) (u v s : List A) → P (u ⌢ v) s → P (u ⌢ ⟨ x ⟩ ⌢ v) (⟨ x ⟩ ⌢ s)
 inverse x ⟨⟩ v s p = ⟨ x ⟩⌢ v with-⟦ ⟨⟩ , s , p , refl ⟧
@@ -28,7 +31,9 @@ symmetricity {xs = .⟨⟩} {.⟨⟩} (∅ refl) = ∅ refl
 symmetricity {xs = .(x ∷ s)} {.(u ⌢ x ∷ v)} ⟨ x ⟩⌢ s with-⟦ u , v , P₁ , refl ⟧ = inverse x u v s (symmetricity P₁)
 
 del-head : {A : Set}(x : A)(xs ys : List A) → P (⟨ x ⟩ ⌢ xs) (⟨ x ⟩ ⌢ ys) → P xs ys
-del-head x xs ys prf = {!!}
+del-head x xs ys ⟨ .x ⟩⌢ .xs with-⟦ ⟨⟩ , .ys , P , refl ⟧ = P
+del-head x xs ys ⟨ .x ⟩⌢ .xs with-⟦ x₁ ∷ u , v , P , p ⟧ with same-head {x = x}{x₁}{ys}{u ⌢ x ∷ v} p
+del-head x xs .(u ⌢ x ∷ v) ⟨ .x ⟩⌢ .xs with-⟦ .x ∷ u , v , P , refl ⟧ | refl = ?
 
 lemma : {A : Set}(x : A)(xs ys us vs : List A) → P (xs ⌢ ys) (us ⌢ vs) → P (xs ⌢ ⟨ x ⟩ ⌢ ys) (us ⌢ ⟨ x ⟩ ⌢ vs)
 lemma x xs ys us vs prf with symmetricity prf
@@ -40,7 +45,8 @@ lemma x xs ys us vs prf with symmetricity prf
 transitivity : {A : Set} {xs ys zs : List A} → P xs ys → P ys zs → P xs zs
 transitivity {xs = xs} {.⟨⟩} {.⟨⟩} p (∅ refl) = p
 transitivity {xs = xs} {.(x ∷ s)} {zs} p ⟨ x ⟩⌢ s with-⟦ u₂ , v₂ , P₂ , p₂ ⟧ with symmetricity p
-transitivity {xs = xs} {.(x ∷ ⟨⟩ ⌢ s)} {zs} p ⟨ x ⟩⌢ s with-⟦ u₂ , v₂ , P₂ , p₂ ⟧ | ⟨ .x ⟩⌢ .s with-⟦ u₁ , v₁ , invP₁ , p₁ ⟧ with symmetricity invP₁
+transitivity {xs = xs} {.(x ∷ ⟨⟩ ⌢ s)} {zs} p ⟨ x ⟩⌢ s with-⟦ u₂ , v₂ , P₂ , p₂ ⟧
+  | ⟨ .x ⟩⌢ .s with-⟦ u₁ , v₁ , invP₁ , p₁ ⟧ with symmetricity invP₁
 ... | P₁ rewrite p₁ | p₂ = lemma x u₁ v₁ u₂ v₂ (transitivity P₁ P₂)
 
 {--
