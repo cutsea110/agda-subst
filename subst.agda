@@ -186,6 +186,12 @@ symmetricity {xs = .(x ∷ s)} {.(u ⌢ x ∷ v)} ⟨ x ⟩⌢ s ≌ .(u ⌢ x �
 -- swap : {A : Set}(x y : A)(xs ys : List A) → P (⟨ x ⟩ ⌢ xs ⌢ ⟨ y ⟩ ⌢ ys) (⟨ y ⟩ ⌢ xs ⌢ ⟨ x ⟩ ⌢ ys)
 -- swap x y xs ys = ⟨ x ⟩⌢ xs ⌢ ⟨ y ⟩ ⌢ ys ≌ ⟨ y ⟩ ⌢ xs ⌢ ⟨ x ⟩ ⌢ ys with-⟦ ⟨ y ⟩ ⌢ xs , ys , inverse y xs ys (xs ⌢ ys) (reflexivity (xs ⌢ ys)) , refl ⟧
 
+test : {A : Set}{x : A}{xs : List A} → P xs (⟨ x ⟩ ⌢ ⟨⟩) → P xs (⟨⟩ ⌢ ⟨ x ⟩)
+test p = p
+
+test₁ : {A : Set}{x y : A}{xs : List A} → P xs (⟨ x ⟩ ⌢ ⟨ y ⟩) → P xs (⟨ y ⟩ ⌢ ⟨ x ⟩)
+test₁ p = {!!}
+
 swap : ∀ {A} {x : A} {u v xs : List A} → P xs (x ∷ u ⌢ v) → P xs (u ⌢ x ∷ v)
 swap {x = x} {u} {v} {.⟨⟩} (∅ ())
 swap {x = x} {u} {v} {.(x₁ ∷ s)} ⟨ x₁ ⟩⌢ s ≌ .(x ∷ u ⌢ v) with-⟦ u₂ , v₂ , P₂ , p₂ ⟧ = {!!}
