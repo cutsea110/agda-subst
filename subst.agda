@@ -212,24 +212,10 @@ test₁ {x = x} {y} {.(x₁ ∷ s)} ⟨ x₁ ⟩⌢ s ≌ .(x ∷ y ∷ ⟨⟩) 
 test₁ {x = x} {y} {.(x₁ ∷ s)} ⟨ x₁ ⟩⌢ s ≌ .(x ∷ y ∷ ⟨⟩) with-⟦ x₂ ∷ x₃ ∷ x₄ ∷ u , v , P , () ⟧
 
 swap : ∀ {A} {x : A} {u v xs : List A} → P xs (x ∷ u ⌢ v) → P xs (u ⌢ x ∷ v)
-swap {x = x} {u} {v} {.⟨⟩} (∅ ())
-swap {x = x} {u} {v} {.(x₁ ∷ ⟨⟩)} ⟨ x₁ ⟩⌢ .⟨⟩ ≌ .(x ∷ u ⌢ v) with-⟦ u₂ , v₂ , (∅ prf) , p₂ ⟧ with ⟨⟩≡xs⌢ys⇒xs≡⟨⟩∧ys≡⟨⟩ u₂ v₂ prf
-swap {x = x} {u} {v} {.(⟨ x₁ ⟩ ⌢ ⟨⟩)} ⟨ x₁ ⟩⌢ .⟨⟩ ≌ .(x ∷ u ⌢ v) with-⟦ .⟨⟩ , .⟨⟩ , (∅ refl) , p₂ ⟧ | refl , refl with x∷u⌢v≡y∷⟨⟩⇒x≡y∧u≡v≡⟨⟩ x u v x₁ p₂
-swap {x = .x₁} {.⟨⟩} {.⟨⟩} {.(⟨ x₁ ⟩ ⌢ ⟨⟩)} ⟨ x₁ ⟩⌢ .⟨⟩ ≌ .(x₁ ∷ ⟨⟩ ⌢ ⟨⟩) with-⟦ .⟨⟩ , .⟨⟩ , (∅ refl) , p₂ ⟧ | refl , refl | refl , refl , refl
-  = ⟨ x₁ ⟩⌢ ⟨⟩ ≌ x₁ ∷ ⟨⟩ with-⟦ ⟨⟩ , ⟨⟩ , (∅ refl) , refl ⟧
-swap {x = x} {u} {v} {.(x₁ ∷ x₂ ∷ ⟨⟩)} ⟨ x₁ ⟩⌢ .(x₂ ∷ ⟨⟩) ≌ .(x ∷ u ⌢ v) with-⟦ u₂ , v₂ , ⟨ x₂ ⟩⌢ .⟨⟩ ≌ .(u₂ ⌢ v₂) with-⟦ t₁ , t₂ , (∅ prf) , snd ⟧ , p₂ ⟧ with ⟨⟩≡xs⌢ys⇒xs≡⟨⟩∧ys≡⟨⟩ t₁ t₂ prf
-swap {x = x} {u} {v} {.(⟨ x₁ ⟩ ⌢ ⟨ x₂ ⟩ ⌢ ⟨⟩)} ⟨ x₁ ⟩⌢ .(⟨ x₂ ⟩ ⌢ ⟨⟩) ≌ .(x ∷ u ⌢ v) with-⟦ x₃ ∷ u₂ , ⟨⟩ , ⟨ x₂ ⟩⌢ .⟨⟩ ≌ .((x₃ ∷ u₂) ⌢ ⟨⟩) with-⟦ .⟨⟩ , .⟨⟩ , (∅ refl) , snd ⟧ , p₂ ⟧ | refl , refl with x∷u⌢v≡y∷⟨⟩⇒x≡y∧u≡v≡⟨⟩ x₃ u₂ ⟨⟩ x₂ snd
-swap {x = x} {u} {v} {.(⟨ x₁ ⟩ ⌢ ⟨ x₂ ⟩ ⌢ ⟨⟩)} ⟨ x₁ ⟩⌢ .(⟨ x₂ ⟩ ⌢ ⟨⟩) ≌ .(x ∷ u ⌢ v) with-⟦ .x₂ ∷ .⟨⟩ , ⟨⟩ , ⟨ x₂ ⟩⌢ .⟨⟩ ≌ .((x₂ ∷ ⟨⟩) ⌢ ⟨⟩) with-⟦ .⟨⟩ , .⟨⟩ , (∅ refl) , refl ⟧ , p₂ ⟧ | refl , refl | refl , refl , refl with same p₂
-swap {x = .x₂} {⟨⟩} {.(x₁ ∷ ⟨⟩)} {.(⟨ x₁ ⟩ ⌢ ⟨ x₂ ⟩ ⌢ ⟨⟩)} ⟨ x₁ ⟩⌢ .(⟨ x₂ ⟩ ⌢ ⟨⟩) ≌ .(x₂ ∷ ⟨⟩ ⌢ x₁ ∷ ⟨⟩) with-⟦ .x₂ ∷ .⟨⟩ , ⟨⟩ , ⟨ x₂ ⟩⌢ .⟨⟩ ≌ .((x₂ ∷ ⟨⟩) ⌢ ⟨⟩) with-⟦ .⟨⟩ , .⟨⟩ , (∅ refl) , refl ⟧ , refl ⟧ | refl , refl | refl , refl , refl | refl , refl
-  = ⟨ x₁ ⟩⌢ x₂ ∷ ⟨⟩ ≌ x₂ ∷ x₁ ∷ ⟨⟩ with-⟦ ⟨ x₂ ⟩ , ⟨⟩ , ⟨ x₂ ⟩⌢ ⟨⟩ ≌ x₂ ∷ ⟨⟩ with-⟦ ⟨⟩ , ⟨⟩ , (∅ refl) , refl ⟧ , refl ⟧
-swap {x = .x₂} {x ∷ u} {v} {.(⟨ x₁ ⟩ ⌢ ⟨ x₂ ⟩ ⌢ ⟨⟩)} ⟨ x₁ ⟩⌢ .(⟨ x₂ ⟩ ⌢ ⟨⟩) ≌ .(x₂ ∷ (x ∷ u) ⌢ v) with-⟦ .x₂ ∷ .⟨⟩ , ⟨⟩ , ⟨ x₂ ⟩⌢ .⟨⟩ ≌ .((x₂ ∷ ⟨⟩) ⌢ ⟨⟩) with-⟦ .⟨⟩ , .⟨⟩ , (∅ refl) , refl ⟧ , p₂ ⟧ | refl , refl | refl , refl , refl | refl , snd with x∷u⌢v≡y∷⟨⟩⇒x≡y∧u≡v≡⟨⟩ x u v x₁ snd
-swap {_} {.x₂} {.x₁ ∷ .⟨⟩} {.⟨⟩} {.(⟨ x₁ ⟩ ⌢ ⟨ x₂ ⟩ ⌢ ⟨⟩)} ⟨ x₁ ⟩⌢ .(⟨ x₂ ⟩ ⌢ ⟨⟩) ≌ .(x₂ ∷ (x₁ ∷ ⟨⟩) ⌢ ⟨⟩) with-⟦ .x₂ ∷ .⟨⟩ , ⟨⟩ , ⟨ x₂ ⟩⌢ .⟨⟩ ≌ .((x₂ ∷ ⟨⟩) ⌢ ⟨⟩) with-⟦ .⟨⟩ , .⟨⟩ , (∅ refl) , refl ⟧ , refl ⟧ | refl , refl | refl , refl , refl | refl , refl | fst , refl , refl
-  = ⟨ x₁ ⟩⌢ x₂ ∷ ⟨⟩ ≌ x₁ ∷ x₂ ∷ ⟨⟩ with-⟦ ⟨⟩ , ⟨ x₂ ⟩ , ⟨ x₂ ⟩⌢ ⟨⟩ ≌ x₂ ∷ ⟨⟩ with-⟦ ⟨⟩ , ⟨⟩ , (∅ refl) , refl ⟧ , refl ⟧
-swap {x = x} {u} {v} {.(⟨ x₁ ⟩ ⌢ ⟨ x₂ ⟩ ⌢ ⟨⟩)} ⟨ x₁ ⟩⌢ .(⟨ x₂ ⟩ ⌢ ⟨⟩) ≌ .(x ∷ u ⌢ v) with-⟦ u₂ , x₃ ∷ v₂ , ⟨ x₂ ⟩⌢ .⟨⟩ ≌ .(u₂ ⌢ x₃ ∷ v₂) with-⟦ .⟨⟩ , .⟨⟩ , (∅ refl) , snd ⟧ , p₂ ⟧ | refl , refl with x∷⟨⟩≡u⌢y∷v⇒x≡y∧u≡v≡⟨⟩ x₂ u₂ x₃ v₂ (sym snd)
-swap {x = x} {u} {v} {.(⟨ x₁ ⟩ ⌢ ⟨ x₂ ⟩ ⌢ ⟨⟩)} ⟨ x₁ ⟩⌢ .(⟨ x₂ ⟩ ⌢ ⟨⟩) ≌ .(x ∷ u ⌢ v) with-⟦ .⟨⟩ , .x₂ ∷ .⟨⟩ , ⟨ x₂ ⟩⌢ .⟨⟩ ≌ .(⟨⟩ ⌢ x₂ ∷ ⟨⟩) with-⟦ .⟨⟩ , .⟨⟩ , (∅ refl) , refl ⟧ , p₂ ⟧ | refl , refl | refl , refl , refl with same p₂
-swap {x = .x₁} {u} {v} {.(⟨ x₁ ⟩ ⌢ ⟨ x₂ ⟩ ⌢ ⟨⟩)} ⟨ x₁ ⟩⌢ .(⟨ x₂ ⟩ ⌢ ⟨⟩) ≌ .(x₁ ∷ u ⌢ v) with-⟦ .⟨⟩ , .x₂ ∷ .⟨⟩ , ⟨ x₂ ⟩⌢ .⟨⟩ ≌ .(⟨⟩ ⌢ x₂ ∷ ⟨⟩) with-⟦ .⟨⟩ , .⟨⟩ , (∅ refl) , refl ⟧ , p₂ ⟧ | refl , refl | refl , refl , refl | refl , snd
-  = ⟨ x₁ ⟩⌢ x₂ ∷ ⟨⟩ ≌ u ⌢ x₁ ∷ v with-⟦ u , v , ⟨ x₂ ⟩⌢ ⟨⟩ ≌ u ⌢ v with-⟦ ⟨⟩ , ⟨⟩ , (∅ refl) , snd ⟧ , refl ⟧
-swap {x = x} {u} {v} {.(x₁ ∷ x₂ ∷ x₃ ∷ s)} ⟨ x₁ ⟩⌢ .(x₂ ∷ x₃ ∷ s) ≌ .(x ∷ u ⌢ v) with-⟦ u₂ , v₂ , ⟨ x₂ ⟩⌢ .(x₃ ∷ s) ≌ .(u₂ ⌢ v₂) with-⟦ t₁ , t₂ , ⟨ x₃ ⟩⌢ s ≌ .(t₁ ⌢ t₂) with-⟦ x₄ ⟧ , snd ⟧ , p₂ ⟧ = {!!}
+swap {x = x} {⟨⟩} {v} {xs} p = p
+swap {x = x} {x₁ ∷ u} {v} {⟨⟩} (∅ ())
+swap {x = x} {x₁ ∷ u} {v} {x₂ ∷ xs} p = {!!}
+
 
 del-head : {A : Set}(x : A)(xs ys : List A) → P (⟨ x ⟩ ⌢ xs) (⟨ x ⟩ ⌢ ys) → P xs ys
 del-head x xs ys ⟨ .x ⟩⌢ .xs ≌ .(x ∷ ys) with-⟦ ⟨⟩ , .ys , P , refl ⟧ = P
