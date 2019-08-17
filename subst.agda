@@ -214,7 +214,10 @@ test₁ {x = x} {y} {.(x₁ ∷ s)} ⟨ x₁ ⟩⌢ s ≌ .(x ∷ y ∷ ⟨⟩) 
 swap : ∀ {A} {x : A} {u v xs : List A} → P xs (x ∷ u ⌢ v) → P xs (u ⌢ x ∷ v)
 swap {x = x} {⟨⟩} {v} {xs} p = p
 swap {x = x} {x₁ ∷ u} {v} {⟨⟩} (∅ ())
-swap {x = x} {x₁ ∷ u} {v} {x₂ ∷ xs} p = {!!}
+swap {x = x} {x₁ ∷ u} {v} {x₂ ∷ .⟨⟩} ⟨ .x₂ ⟩⌢ .⟨⟩ ≌ .(x ∷ x₁ ∷ u ⌢ v) with-⟦ fst , fst₁ , (∅ prf) , snd ⟧ with ⟨⟩≡xs⌢ys⇒xs≡⟨⟩∧ys≡⟨⟩ fst fst₁ prf
+swap {x = x} {x₁ ∷ u} {v} {x₂ ∷ .⟨⟩} ⟨ .x₂ ⟩⌢ .⟨⟩ ≌ .(x ∷ (x₁ ∷ u) ⌢ v) with-⟦ .⟨⟩ , .⟨⟩ , (∅ refl) , snd ⟧ | refl , refl with same snd
+swap {x = x} {x₁ ∷ u} {v} {x₂ ∷ .⟨⟩} ⟨ .x₂ ⟩⌢ .⟨⟩ ≌ .(x ∷ (x₁ ∷ u) ⌢ v) with-⟦ .⟨⟩ , .⟨⟩ , (∅ refl) , snd ⟧ | refl , refl | ()
+swap {x = x} {x₁ ∷ u} {v} {x₂ ∷ .(x₃ ∷ s)} ⟨ .x₂ ⟩⌢ .(x₃ ∷ s) ≌ .(x ∷ x₁ ∷ u ⌢ v) with-⟦ fst , fst₁ , ⟨ x₃ ⟩⌢ s ≌ .(fst ⌢ fst₁) with-⟦ x₄ ⟧ , snd ⟧ = ?
 
 
 del-head : {A : Set}(x : A)(xs ys : List A) → P (⟨ x ⟩ ⌢ xs) (⟨ x ⟩ ⌢ ys) → P xs ys
