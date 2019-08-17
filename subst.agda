@@ -26,6 +26,19 @@ data P {A : Set} : List A → List A → Set where
 ⟨⟩≡xs⌢ys⇒xs≡⟨⟩∧ys≡⟨⟩ ⟨⟩ (x ∷ ys) ()
 ⟨⟩≡xs⌢ys⇒xs≡⟨⟩∧ys≡⟨⟩ (x ∷ xs) ys ()
 
+-- | invalid
+x∷xs≢⟨⟩ : {A : Set}(x : A)(xs : List A) → x ∷ xs ≢ ⟨⟩
+x∷xs≢⟨⟩ x xs = λ ()
+
+-- | single
+x∷⟨⟩≡u⌢y∷v⇒x≡y∧u≡v≡⟨⟩ : {A : Set}(x : A)(u : List A)(y : A)(v : List A) → x ∷ ⟨⟩ ≡ u ⌢ y ∷ v → x ≡ y ∧ u ≡ ⟨⟩ ∧ v ≡ ⟨⟩
+x∷⟨⟩≡u⌢y∷v⇒x≡y∧u≡v≡⟨⟩ x ⟨⟩ .x .⟨⟩ refl = refl , refl , refl
+x∷⟨⟩≡u⌢y∷v⇒x≡y∧u≡v≡⟨⟩ x (x₁ ∷ ⟨⟩) y v ()
+x∷⟨⟩≡u⌢y∷v⇒x≡y∧u≡v≡⟨⟩ x (x₁ ∷ x₂ ∷ u) y v ()
+
+x∷u⌢v≡y∷⟨⟩⇒x≡y∧u≡v≡⟨⟩ : {A : Set}(x : A)(u v : List A)(y : A) → x ∷ u ⌢ v ≡ y ∷ ⟨⟩ → x ≡ y ∧ u ≡ ⟨⟩ ∧ v ≡ ⟨⟩
+x∷u⌢v≡y∷⟨⟩⇒x≡y∧u≡v≡⟨⟩ x ⟨⟩ .⟨⟩ .x refl = refl , refl , refl
+
 same : {A : Set}{x y : A}{xs ys : List A} → x ∷ xs ≡ y ∷ ys → x ≡ y ∧ xs ≡ ys
 same refl = refl , refl
 
@@ -200,7 +213,11 @@ test₁ {x = x} {y} {.(x₁ ∷ s)} ⟨ x₁ ⟩⌢ s ≌ .(x ∷ y ∷ ⟨⟩) 
 
 swap : ∀ {A} {x : A} {u v xs : List A} → P xs (x ∷ u ⌢ v) → P xs (u ⌢ x ∷ v)
 swap {x = x} {u} {v} {.⟨⟩} (∅ ())
-swap {x = x} {u} {v} {.(x₁ ∷ s)} ⟨ x₁ ⟩⌢ s ≌ .(x ∷ u ⌢ v) with-⟦ u₂ , v₂ , P₂ , p₂ ⟧ = {!!}
+swap {x = x} {u} {v} {.(x₁ ∷ ⟨⟩)} ⟨ x₁ ⟩⌢ .⟨⟩ ≌ .(x ∷ u ⌢ v) with-⟦ u₂ , v₂ , (∅ prf) , p₂ ⟧ with ⟨⟩≡xs⌢ys⇒xs≡⟨⟩∧ys≡⟨⟩ u₂ v₂ prf
+swap {x = x} {u} {v} {.(⟨ x₁ ⟩ ⌢ ⟨⟩)} ⟨ x₁ ⟩⌢ .⟨⟩ ≌ .(x ∷ u ⌢ v) with-⟦ .⟨⟩ , .⟨⟩ , (∅ refl) , p₂ ⟧ | refl , refl with x∷u⌢v≡y∷⟨⟩⇒x≡y∧u≡v≡⟨⟩ x u v x₁ p₂
+swap {x = .x₁} {.⟨⟩} {.⟨⟩} {.(⟨ x₁ ⟩ ⌢ ⟨⟩)} ⟨ x₁ ⟩⌢ .⟨⟩ ≌ .(x₁ ∷ ⟨⟩ ⌢ ⟨⟩) with-⟦ .⟨⟩ , .⟨⟩ , (∅ refl) , p₂ ⟧ | refl , refl | refl , refl , refl
+  = ⟨ x₁ ⟩⌢ ⟨⟩ ≌ x₁ ∷ ⟨⟩ with-⟦ ⟨⟩ , ⟨⟩ , (∅ refl) , refl ⟧
+swap {x = x} {u} {v} {.(x₁ ∷ x₂ ∷ s)} ⟨ x₁ ⟩⌢ .(x₂ ∷ s) ≌ .(x ∷ u ⌢ v) with-⟦ u₂ , v₂ , ⟨ x₂ ⟩⌢ s ≌ .(u₂ ⌢ v₂) with-⟦ x₃ ⟧ , p₂ ⟧ = {!!}
 
 del-head : {A : Set}(x : A)(xs ys : List A) → P (⟨ x ⟩ ⌢ xs) (⟨ x ⟩ ⌢ ys) → P xs ys
 del-head x xs ys ⟨ .x ⟩⌢ .xs ≌ .(x ∷ ys) with-⟦ ⟨⟩ , .ys , P , refl ⟧ = P
